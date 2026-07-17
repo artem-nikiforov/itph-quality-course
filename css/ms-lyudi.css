@@ -461,8 +461,8 @@ input:focus-visible {
 }
 
 .person-hours-calc b {
-  color: var(--ku-brand-on);
-  background: var(--ku-brand);
+  color: var(--ku-brand-strong);
+  background: var(--ku-card);
 }
 
 .person-hours-calc i {
