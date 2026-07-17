@@ -268,9 +268,11 @@ input:focus-visible {
 
 .chapter-hero h1 {
   color: currentColor;
-  font-size: clamp(2.6rem, 1.5rem + 4.5vw, 5rem);
+  max-width: 58rem;
+  font-size: clamp(2.15rem, 1.45rem + 3vw, 4.25rem);
   font-weight: 800;
-  line-height: 0.98;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
 .chapter-lead {
@@ -456,6 +458,23 @@ input:focus-visible {
 .brief-card {
   color: var(--ku-brand-on);
   background: var(--ku-brand);
+}
+
+.brief-card--bad {
+  color: var(--ku-text);
+  border-color: #efb9c1;
+  background: #fff1f3;
+  box-shadow: none;
+}
+
+.brief-card--bad h2,
+.brief-card--bad > div > span {
+  color: #9f3442;
+}
+
+.brief-card--bad blockquote {
+  border-left-color: #e9a8b1;
+  color: var(--ku-text-soft);
 }
 
 .flag-grid button > span,
