@@ -115,13 +115,18 @@ input:focus-visible {
 .hero-placeholder {
   min-height: min(46rem, calc(100vh - 3.5rem));
   color: var(--ku-text);
-  background:
-    linear-gradient(90deg,
-      color-mix(in srgb, var(--ku-surface) 94%, transparent) 0%,
-      color-mix(in srgb, var(--ku-surface) 86%, transparent) 35%,
-      transparent 60%),
-    url("../assets/images/6708CA46-15E6-4EEC-A063-1A05C9A79D64.jpg") center / cover no-repeat;
+  background: var(--ku-surface);
   isolation: isolate;
+}
+
+.hero-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .hero-placeholder::before {
@@ -666,7 +671,10 @@ input:focus-visible {
 
   .hero-placeholder {
     min-height: 42rem;
-    background-position: 62% center;
+  }
+
+  .hero-art {
+    object-position: 62% center;
   }
 
   .hero-copy {
