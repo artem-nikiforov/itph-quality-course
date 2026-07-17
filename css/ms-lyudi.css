@@ -451,18 +451,13 @@ input:focus-visible {
   min-height: 3.4rem;
   place-items: center;
   padding: 0.7rem;
-  border: var(--ku-border-w) solid var(--ku-border);
+  border: var(--ku-border-w) solid color-mix(in srgb, var(--ku-brand) 24%, transparent);
   border-radius: var(--ku-radius-m);
   color: var(--ku-brand-strong);
-  background: var(--ku-card);
+  background: color-mix(in srgb, var(--ku-brand) 12%, transparent);
   text-align: center;
   font-size: 0.95rem;
   line-height: 1.2;
-}
-
-.person-hours-calc b {
-  color: var(--ku-brand-strong);
-  background: var(--ku-card);
 }
 
 .person-hours-calc i {
