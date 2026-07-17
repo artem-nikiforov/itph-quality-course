@@ -1,0 +1,853 @@
+/* ════════════════════════════════════════════════════════════════════════
+   E-LEARNING KIT — переиспользуемые стили для интерактивных курсов-лонгридов
+   ────────────────────────────────────────────────────────────────────────
+   Извлечено из курса «Гостемания». Без зависимостей (чистый CSS).
+   Все цвета и шрифты вынесены в CSS-переменные (:root) — перекрась один раз
+   и весь кит подстроится под фирстиль нового проекта.
+
+   СОДЕРЖАНИЕ
+     0.  Переменные темы (:root)
+     1.  База (reset, типографика)
+     2.  SPA-страницы (.page)
+     3.  Анимация появления по скроллу (.fade-in)
+     4.  Верхняя навигация + прогресс-бар
+     5.  Контентная обёртка (.content-wrap)
+     6.  Кнопки (.btn-*)
+     7.  Карточки-главы с последовательной разблокировкой (.chapter-card)
+     8.  Карточки-разделы (.hub-card) — locked / done
+     9.  «Фичекарточки» равной высоты (.feature-card)
+     10. Таблицы данных (.data-table)
+     11. Галерея / карусель (.gallery-*)
+     12. Интерактив: сортировка списка (.sortable-list)
+     13. Интерактив: два контейнера drag-and-drop (.drag-chip / .drop-zone)
+     14. Интерактив: выбор варианта (.match-*)
+     15. Блок обратной связи (.feedback-box)
+     16. Аккордеон FAQ (.faq-*)
+     17. Слот изображения с фолбэком (.img-slot)
+     18. Видео / аудио (embed)
+     19. Заметки на полях / маргиналии (.marginal-note)
+     20. Диалоги и «пузыри речи» (.speech-* / .dialogue-*)
+     21. Выноски (.callout)
+     22. Модальное окно (.modal-*)
+   ════════════════════════════════════════════════════════════════════════ */
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   0. ПЕРЕМЕННЫЕ ТЕМЫ
+   Меняешь здесь — меняется везде. Это главная точка кастомизации кита.
+   ════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Палитра. Названия семантические, чтобы код не зависел от конкретного цвета */
+  --c-brand:     #FF8732;   /* основной акцент (кнопки, ссылки, активные элементы) */
+  --c-brand-dk:  #D62300;   /* акцент при наведении / нажатии */
+  --c-success:   #198737;   /* «верно», пройдено */
+  --c-warning:   #FFAA00;   /* предупреждение, второстепенный акцент */
+  --c-danger:    #D62300;   /* «неверно», ошибка */
+  --c-ink:       #502314;   /* основной цвет текста */
+  --c-cream:     #F5EBDC;   /* мягкий фон карточек/блоков */
+  --c-paper:     #ffffff;   /* фон страницы */
+  --c-muted:     #E8E0D3;   /* нейтральные разделители/рамки */
+
+  /* Шрифты. Подключи свои @font-face или Google Fonts и поменяй имена здесь */
+  --font-head:   'Flame', 'Roboto', sans-serif;  /* заголовки/акценты */
+  --font-body:   'Roboto', system-ui, sans-serif; /* основной текст */
+
+  /* Геометрия — единый «язык» скруглений и ширины контента */
+  --radius-sm:   10px;
+  --radius:      16px;
+  --radius-lg:   20px;
+  --content-max: 760px;     /* макс. ширина читаемой колонки */
+  --shadow:      0 4px 20px rgba(0,0,0,0.12);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   1. БАЗА
+   ════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--c-ink);
+  background: var(--c-paper);
+  margin: 0;
+}
+
+/* Заголовки набираем акцидентным шрифтом */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-head);
+  font-weight: 700;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   2. SPA-СТРАНИЦЫ
+   Весь курс — один HTML-файл. Каждая «страница» — <div class="page">.
+   Активная получает класс .active (показана), остальные скрыты.
+   Переключение делает JS-функция navigateTo() (см. elearning-kit.js).
+   ════════════════════════════════════════════════════════════════════════ */
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   3. ПОЯВЛЕНИЕ ПО СКРОЛЛУ
+   Любой блок с .fade-in изначально прозрачен и смещён вниз.
+   IntersectionObserver добавляет .visible, когда блок входит во вьюпорт.
+   ════════════════════════════════════════════════════════════════════════ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   4. ВЕРХНЯЯ НАВИГАЦИЯ + ПРОГРЕСС-БАР
+   Фиксированная шапка: кнопка «домой», название главы, счётчик «X / N».
+   Полоска прогресса внизу шапки заполняется по мере продвижения.
+   ════════════════════════════════════════════════════════════════════════ */
+#top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--c-paper);
+  box-shadow: 0 1px 0 var(--c-cream);
+}
+.nav-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nav-home-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  color: var(--c-ink);
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  transition: color 0.2s; padding: 0;
+}
+.nav-home-btn:hover { color: var(--c-brand); }
+#nav-chapter {
+  font-family: var(--font-head); font-size: 14px;
+  color: var(--c-ink); opacity: 0.7; text-align: center; flex: 1;
+}
+#nav-progress { font-size: 13px; color: var(--c-ink); opacity: 0.5; white-space: nowrap; }
+#progress-bar-wrap { height: 3px; background: var(--c-cream); }
+#progress-bar {
+  height: 3px; width: 0%;
+  background: var(--c-brand);
+  transition: width 0.5s ease;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   5. КОНТЕНТНАЯ ОБЁРТКА
+   Центрирует читаемую колонку и задаёт вертикальные отступы.
+   ════════════════════════════════════════════════════════════════════════ */
+.content-wrap {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+.body-text p { font-size: 17px; line-height: 1.65; margin: 0 0 16px; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   6. КНОПКИ
+   .btn-next      — основное действие «Далее» (акцентная, акцидентный шрифт)
+   .btn-secondary — второстепенное действие (контурная)
+   .btn-check     — «Проверить» в интерактивах (зелёная)
+   .btn-download  — кнопка-ссылка для скачивания файла
+   ════════════════════════════════════════════════════════════════════════ */
+.btn-next {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--c-brand); color: #fff; border: none;
+  border-radius: 12px; padding: 14px 32px;
+  font-family: var(--font-head); font-size: 18px; cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-next:hover { background: var(--c-brand-dk); box-shadow: 0 4px 16px rgba(214,35,0,0.25); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--c-cream); color: var(--c-ink);
+  border: 2px solid var(--c-brand); border-radius: 12px; padding: 10px 24px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 500; cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-secondary:hover { background: #FFE8C8; }
+
+.btn-check {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--c-success); color: #fff; border: none;
+  border-radius: var(--radius-sm); padding: 12px 28px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-check:hover { background: #126128; }
+.btn-check:disabled { background: #ccc; cursor: default; }
+
+.btn-download {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--c-cream); color: var(--c-ink);
+  border-radius: var(--radius-sm); padding: 12px 20px;
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-download:hover { background: #EADFCB; }
+
+/* Ряд с кнопкой «Далее»: по центру колонки */
+.next-row { margin-top: 56px; display: flex; justify-content: center; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   7. КАРТОЧКИ-ГЛАВЫ С ПОСЛЕДОВАТЕЛЬНОЙ РАЗБЛОКИРОВКОЙ
+   Оглавление курса. Главы открываются по очереди: класс .locked делает
+   карточку серой и некликабельной, бейдж-замок виден ТОЛЬКО при .locked.
+   Снимает/ставит .locked — JS (applyHomeLocks).
+   ════════════════════════════════════════════════════════════════════════ */
+.chapter-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px;
+}
+@media (max-width: 600px) { .chapter-grid { grid-template-columns: 1fr; } }
+
+.chapter-card {
+  position: relative;
+  border: 2px solid var(--c-cream); border-radius: var(--radius);
+  padding: 24px; cursor: pointer;
+  display: flex; align-items: flex-start; gap: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
+}
+.chapter-card:hover { border-color: var(--c-brand); box-shadow: 0 4px 20px rgba(255,135,50,0.15); }
+.chapter-card.full-width { grid-column: 1 / -1; }       /* карточка на всю ширину */
+.chapter-card.locked { opacity: 0.5; pointer-events: none; filter: grayscale(0.4); }
+
+/* Номер главы — цветной квадрат (цвет задаётся инлайн в разметке) */
+.chapter-num {
+  width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-size: 22px; color: #fff;
+}
+.chapter-card h3 { font-size: 17px; margin: 0 0 4px; transition: color 0.2s; }
+.chapter-card:hover h3 { color: var(--c-brand); }
+.chapter-card p { font-size: 13px; opacity: 0.55; margin: 0; }
+
+/* Бейдж-замок: скрыт по умолчанию, виден только когда глава заблокирована */
+.chapter-card .chapter-lock {
+  position: absolute; top: 12px; right: 12px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #B7AFA2;
+  display: none; align-items: center; justify-content: center;
+}
+.chapter-card.locked .chapter-lock { display: flex; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   8. КАРТОЧКИ-РАЗДЕЛЫ (хаб с подразделами)
+   То же, что главы, но внутри одной главы. Поддерживают два состояния:
+   .locked (недоступен) и .done (пройден, зелёная рамка + галочка).
+   ВАЖНО: замок показываем ТОЛЬКО при .locked, галочку — ТОЛЬКО при .done.
+   ════════════════════════════════════════════════════════════════════════ */
+.hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 600px) { .hub-grid { grid-template-columns: 1fr; } }
+
+.hub-card {
+  position: relative;
+  border: 2px solid var(--c-cream); border-radius: var(--radius);
+  padding: 24px 16px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
+}
+.hub-card:hover:not(.locked) { border-color: var(--c-brand); box-shadow: 0 4px 20px rgba(255,135,50,0.15); }
+.hub-card.locked { opacity: 0.45; pointer-events: none; filter: grayscale(0.5); }
+.hub-card.done { border-color: var(--c-success); background: #F0FBF3; }
+.hub-card .hub-icon {
+  width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.hub-card h3 { font-size: 16px; margin: 0 0 6px; }
+.hub-card p { font-size: 13px; opacity: 0.6; margin: 0; }
+
+.hub-card .lock-badge,
+.hub-card .done-badge {
+  position: absolute; top: 12px; right: 12px;
+  width: 24px; height: 24px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+}
+.hub-card .lock-badge { background: #ccc; }
+.hub-card .done-badge { background: var(--c-success); }
+.hub-card.locked .lock-badge { display: flex; }   /* замок только когда заблокировано */
+.hub-card.done   .done-badge { display: flex; }    /* галочка только когда пройдено */
+.hub-card.done   .lock-badge { display: none; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   9. «ФИЧЕКАРТОЧКИ» РАВНОЙ ВЫСОТЫ
+   Ряд одинаковых карточек (напр. «ты / гость / компания»).
+   Хитрости равенства:
+     • minmax(0,1fr) — колонки не растягиваются под длинное слово;
+     • align-items: stretch + height:100% — одинаковая высота;
+     • .card-sub { flex:1 } — подпись добирает остаток, низ ровный.
+   ════════════════════════════════════════════════════════════════════════ */
+.cards-row {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px; align-items: stretch;
+}
+@media (max-width: 760px) { .cards-row { grid-template-columns: 1fr; } }
+
+.feature-card {
+  height: 100%;
+  background: var(--c-cream); border-radius: var(--radius);
+  padding: 28px 20px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 12px;
+}
+.card-big-word {
+  font-family: var(--font-head); font-size: clamp(24px, 4vw, 52px);
+  color: var(--c-brand); line-height: 1;
+  min-height: 52px; display: flex; align-items: center;
+  white-space: nowrap;   /* длинное слово не переносится посреди */
+}
+.card-sub { flex: 1; font-size: 14px; opacity: 0.75; line-height: 1.5; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   10. ТАБЛИЦЫ ДАННЫХ
+   Оборачивай в <div style="overflow-x:auto"> для горизонтального скролла
+   на узких экранах.
+   ════════════════════════════════════════════════════════════════════════ */
+.data-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.data-table th, .data-table td {
+  border: 1px solid var(--c-cream); padding: 12px 14px; text-align: left; vertical-align: top;
+}
+.data-table th { background: var(--c-cream); font-family: var(--font-head); }
+.data-table tr:nth-child(even) td { background: #FCF8F1; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   11. ГАЛЕРЕЯ / КАРУСЕЛЬ
+   Лента слайдов сдвигается через transform: translateX(). Управление —
+   стрелки + точки. Логика в JS (galleryMove / renderGallery).
+   ════════════════════════════════════════════════════════════════════════ */
+.gallery-wrap { position: relative; overflow: hidden; border-radius: var(--radius); }
+.gallery-track { display: flex; transition: transform 0.4s ease; }
+.gallery-slide { min-width: 100%; }       /* один слайд = 100% ширины окна */
+.gallery-controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 12px; }
+.gallery-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--c-brand); background: #fff; color: var(--c-brand);
+  cursor: pointer; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.gallery-btn:hover { background: var(--c-brand); color: #fff; }
+.gallery-dots { display: flex; gap: 6px; }
+.gallery-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-cream); cursor: pointer; transition: background 0.2s; }
+.gallery-dot.active { background: var(--c-brand); }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   12. ИНТЕРАКТИВ: СОРТИРОВКА СПИСКА (drag-and-drop по вертикали)
+   Перетаскивание элементов списка для расстановки в правильном порядке.
+   Каждому элементу нужен data-idx — по нему JS проверяет порядок.
+   ════════════════════════════════════════════════════════════════════════ */
+.sortable-list { display: flex; flex-direction: column; gap: 10px; }
+.sort-item {
+  display: flex; align-items: center; gap: 12px;
+  background: #fff; border: 2px solid var(--c-cream); border-radius: 12px;
+  padding: 14px 16px; cursor: grab; font-size: 15px;
+  transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+.sort-item:hover { border-color: var(--c-brand); }
+.sort-item.dragging { opacity: 0.4; }                      /* перетаскиваемый */
+.sort-item.drag-over-top    { box-shadow: 0 -3px 0 var(--c-brand); }  /* индикатор вставки сверху */
+.sort-item.drag-over-bottom { box-shadow: 0  3px 0 var(--c-brand); }  /* …снизу */
+.sort-handle { color: var(--c-brand); flex-shrink: 0; display: flex; } /* «ручка» */
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   13. ИНТЕРАКТИВ: ДВА КОНТЕЙНЕРА DRAG-AND-DROP
+   Чипы (.drag-chip) из пула перетаскиваются в две зоны (.drop-zone).
+   У чипа должен быть data-key — по нему JS проверяет распределение.
+   Поддержка тача — через клон, следующий за пальцем (см. JS).
+   ════════════════════════════════════════════════════════════════════════ */
+.zone-pool {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 14px; background: #fff; border-radius: 12px; min-height: 56px;
+}
+.drag-chip {
+  background: var(--c-brand); color: #fff;
+  border-radius: 999px; padding: 8px 14px; font-size: 14px; cursor: grab;
+  user-select: none; touch-action: none;   /* важно для тач-драга */
+  transition: transform 0.15s, opacity 0.15s;
+}
+.drag-chip.dragging { opacity: 0.5; }
+.drop-zones-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .drop-zones-row { grid-template-columns: 1fr; } }
+.drop-zone-label { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+.drop-zone {
+  min-height: 80px; padding: 12px; border-radius: 12px;
+  background: var(--c-cream); border: 2px dashed transparent;
+  display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start;
+  transition: border-color 0.15s, background 0.15s;
+}
+.drop-zone.drag-over { border-color: var(--c-brand); background: #FFF1E2; }  /* подсветка цели */
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   14. ИНТЕРАКТИВ: ВЫБОР ВАРИАНТА (matching / викторина)
+   Кнопки-варианты; правильная подсвечивается зелёным, неверная «мигает».
+   ════════════════════════════════════════════════════════════════════════ */
+.match-question { margin-bottom: 18px; }
+.match-question.solved { opacity: 0.85; }
+.match-options, .answer-choices { display: flex; flex-direction: column; gap: 8px; }
+.match-btn, .answer-btn {
+  text-align: left; background: #fff;
+  border: 2px solid var(--c-cream); border-radius: 12px;
+  padding: 12px 16px; font-size: 15px; cursor: pointer; color: var(--c-ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+.match-btn:hover:not(:disabled), .answer-btn:hover:not(:disabled) { border-color: var(--c-brand); }
+.match-btn:disabled, .answer-btn:disabled { cursor: default; }
+.correct-pick, .answer-btn.correct { border-color: var(--c-success); background: #F0FBF3; }
+/* «Мигание» при неверном ответе */
+.wrong-pick, .answer-btn.wrong { animation: kit-shake 0.4s; border-color: var(--c-danger); }
+@keyframes kit-shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   15. БЛОК ОБРАТНОЙ СВЯЗИ
+   Появляется после проверки. .correct — зелёный, .incorrect — красный.
+   JS подставляет текст и переключает классы.
+   ════════════════════════════════════════════════════════════════════════ */
+.feedback-box {
+  display: none; margin-top: 16px;
+  border-radius: 14px; padding: 14px 16px; font-size: 15px; line-height: 1.5;
+}
+.feedback-box.show { display: block; }
+.feedback-box.correct   { background: #F0FBF3; border: 1px solid var(--c-success); }
+.feedback-box.incorrect { background: #FDF1EF; border: 1px solid var(--c-danger); }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   16. АККОРДЕОН FAQ
+   Раскрытие через max-height-переход (работает без JS-измерений высоты).
+   Класс .open ставится одновременно на кнопку и тело (см. toggleFaq).
+   ════════════════════════════════════════════════════════════════════════ */
+.faq-item { border-bottom: 1px solid var(--c-cream); }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 16px 0; font-size: 16px; font-weight: 500; color: var(--c-ink);
+}
+.faq-q svg { transition: transform 0.25s; flex-shrink: 0; }
+.faq-q.open svg { transform: rotate(180deg); }
+.faq-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-body.open { max-height: 800px; }       /* «достаточно большое» значение */
+.faq-body-inner { padding: 0 0 16px; font-size: 15px; line-height: 1.6; opacity: 0.85; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   17. СЛОТ ИЗОБРАЖЕНИЯ С ФОЛБЭКОМ
+   Если картинка не загрузилась — показывается подпись-заглушка (.img-label).
+   В разметке: <img ... onerror="this.style.display='none'"> + соседний .img-label.
+   Для инфографик используем object-fit: contain (показываем целиком).
+   ════════════════════════════════════════════════════════════════════════ */
+.img-slot { position: relative; background: var(--c-cream); border-radius: var(--radius); overflow: hidden; }
+.img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.img-slot.infographic-slot { min-height: 200px; }
+.img-slot.infographic-slot img { height: auto; object-fit: contain; }  /* инфографику не обрезаем */
+.img-label {
+  position: absolute; inset: 0; pointer-events: none; padding: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  font-size: 12px; opacity: 0.45; text-align: center;
+}
+.img-slot img[src]:not([src=""]) + .img-label { display: none; } /* прячем подпись, если картинка есть */
+
+/* Адаптация под горизонтальный режим телефона: ничего не обрезаем, ограничиваем высоту */
+@media (orientation: landscape) and (max-height: 600px) {
+  .img-slot.infographic-slot img { max-height: 78vh; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   18. ВИДЕО / АУДИО
+   Адаптивная обёртка 16:9 для <iframe> (YouTube/Vimeo/PeerTube) или <video>.
+   ════════════════════════════════════════════════════════════════════════ */
+.video-wrap { border-radius: 12px; overflow: hidden; background: #111; }
+.video-embed { width: 100%; display: block; min-height: 180px; }
+/* Обёртка фикс. соотношения: <div class="ratio-16x9"><iframe ...></iframe></div> */
+.ratio-16x9 { position: relative; padding-top: 56.25%; }
+.ratio-16x9 > iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.audio-embed { width: 100%; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   19. ЗАМЕТКИ НА ПОЛЯХ (маргиналии)
+   На десктопе — узкая колонка справа от основного блока (через .with-margin).
+   На мобильном — переносится вниз. Нейтральный вид (без цветной подложки).
+   ════════════════════════════════════════════════════════════════════════ */
+.with-margin { display: flex; flex-direction: column; gap: 20px; align-items: stretch; }
+@media (min-width: 880px) {
+  .with-margin { flex-direction: row; align-items: flex-start; gap: 28px; }
+  .with-margin > :first-child { flex: 1; min-width: 0; }      /* основной контент */
+  .with-margin > .marginal-note { width: 140px; flex-shrink: 0; }
+  /* Float-вариант — когда заметку нужно вставить внутрь длинного блока */
+  .marginal-note--float { float: right; clear: right; width: 140px; margin: 0 0 20px 24px; }
+}
+.marginal-note {
+  background: transparent;
+  border-left: 2px solid var(--c-muted);   /* нейтральный отделитель */
+  padding: 4px 0 4px 14px;
+}
+.marginal-note__eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-brand); margin: 0 0 5px; }
+.marginal-note__title { font-family: var(--font-head); font-size: 15px; margin: 0 0 8px; line-height: 1.2; }
+.marginal-note__text { font-size: 12px; line-height: 1.55; opacity: 0.72; margin: 0; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   20. ДИАЛОГИ И «ПУЗЫРИ РЕЧИ»
+   Вопрос — пузырь слева с аватаром; ответ — пузырь справа (акцентный фон).
+   Удобно для имитации диалога «сотрудник ↔ наставник».
+   ════════════════════════════════════════════════════════════════════════ */
+.speech-wrap { display: flex; align-items: flex-start; gap: 12px; }
+.speech-avatar {
+  width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  background: var(--c-cream); font-size: 10px; text-align: center;
+  display: flex; align-items: center; justify-content: center;
+}
+.speech-bubble {
+  background: var(--c-cream); border-radius: 16px 16px 16px 4px;
+  padding: 12px 16px; font-size: 15px; line-height: 1.5;
+}
+.speech-wrap-reply { display: flex; justify-content: flex-end; }
+.speech-bubble-reply {
+  background: var(--c-brand); color: #fff;
+  border-radius: 16px 16px 4px 16px;
+  padding: 12px 16px; font-size: 15px; line-height: 1.5; max-width: 85%; white-space: pre-line;
+}
+
+/* Разбор диалога по шагам (напр. буквы алгоритма) */
+.dialogue-line { display: flex; gap: 12px; align-items: flex-start; padding: 6px 0; }
+.dialogue-line.highlight { background: #FFF6EC; border-radius: 10px; padding: 8px 12px; }
+.dialogue-badge {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--c-brand); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-size: 14px;
+}
+.dialogue-badge.guest { background: #9C8A78; }
+.dialogue-speaker { font-size: 12px; font-weight: 700; opacity: 0.6; }
+.dialogue-text { font-size: 15px; line-height: 1.5; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   21. ВЫНОСКИ
+   Акцентные блоки «Важно / Главное». Цвет полосы слева — по смыслу.
+   ════════════════════════════════════════════════════════════════════════ */
+.callout {
+  background: var(--c-cream); border-left: 4px solid var(--c-brand);
+  border-radius: 0 12px 12px 0; padding: 16px 18px; font-size: 15px; line-height: 1.55;
+}
+.callout.green { border-left-color: var(--c-success); }
+.callout.red   { border-left-color: var(--c-danger); }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   22. МОДАЛЬНОЕ ОКНО
+   Полупрозрачный оверлей + центрированная карточка. Открытие — класс .open.
+   Закрытие по клику на фон, крестик или Esc (см. JS).
+   ════════════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(80,35,20,0.45);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  position: relative; width: 100%; max-width: 400px;
+  background: #fff; border-radius: var(--radius-lg);
+  padding: 32px 28px 28px; box-shadow: 0 16px 48px rgba(0,0,0,0.28);
+}
+.modal__close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; cursor: pointer;
+  font-size: 18px; line-height: 1; color: var(--c-ink); opacity: 0.45; padding: 4px;
+  transition: opacity 0.15s;
+}
+.modal__close:hover { opacity: 1; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   COURSE THEME — «Как через ITPH обеспечивать качество»
+   Дополняет переиспользуемый e-learning kit, не меняя его архитектуру.
+   ════════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Flame';
+  src: url('fonts/FLAME-REGULAR.OTF') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Flame';
+  src: url('fonts/FLAME-BOLD.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --c-brand: #ff8732;
+  --c-brand-dk: #d62300;
+  --c-success: #198737;
+  --c-warning: #ffb71b;
+  --c-danger: #d62300;
+  --c-ink: #502314;
+  --c-cream: #f5ebdc;
+  --c-paper: #fffdfa;
+  --c-muted: #e8ded1;
+  --c-dark: #21130e;
+  --c-purple: #6b3fa0;
+  --font-head: 'Flame', Arial, sans-serif;
+  --font-body: Arial, system-ui, sans-serif;
+  --content-max: 820px;
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 32px;
+  --shadow: 0 18px 50px rgba(80, 35, 20, .12);
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--c-paper); padding-top: 56px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #2f7ed8; outline-offset: 3px; }
+.content-wrap { padding: 56px 24px 92px; }
+.lesson-body > * + * { margin-top: 36px; }
+.lesson-body p { font-size: 18px; line-height: 1.62; }
+.eyebrow { margin: 0 0 12px; font-size: 12px !important; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.btn-primary, .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border-radius: 14px; padding: 14px 24px; font: 700 17px/1.2 var(--font-head); text-decoration: none; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.btn-primary { border: 0; background: var(--c-brand-dk); color: #fff; box-shadow: 0 10px 24px rgba(214, 35, 0, .22); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(214, 35, 0, .28); }
+.btn-secondary { border: 2px solid var(--c-ink); background: transparent; color: var(--c-ink); }
+.btn-secondary:hover { transform: translateY(-2px); background: #fff; }
+.next-row { display: flex; justify-content: flex-end; padding-top: 18px; }
+
+/* Hero + home */
+.hero-placeholder { position: relative; min-height: min(780px, calc(100vh - 56px)); overflow: hidden; display: grid; align-items: center; background: linear-gradient(115deg, #3a170d 0%, #5f2612 46%, #ff8732 100%); color: #fff; }
+.hero-pattern { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px); background-size: 56px 56px; mask-image: linear-gradient(to right, transparent 5%, #000 55%); }
+.hero-pattern::after { content: ''; position: absolute; width: 480px; height: 480px; border: 110px solid rgba(255,255,255,.1); border-radius: 50%; right: -80px; top: 50%; transform: translateY(-50%); }
+.hero-copy { position: relative; z-index: 2; width: min(1120px, calc(100% - 48px)); margin: 0 auto; padding: 76px 0; }
+.hero-kicker { display: inline-flex; padding: 8px 12px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; font-size: 13px; font-weight: 700; }
+.hero-copy h1 { margin: 24px 0 22px; max-width: 760px; font-size: clamp(52px, 7.2vw, 108px); line-height: .88; letter-spacing: -.045em; }
+.hero-copy p { max-width: 580px; margin: 0 0 34px; font-size: clamp(18px, 2vw, 24px); line-height: 1.42; }
+.hero-photo-note { display: none; }
+.hero-photo-note > span { grid-row: 1 / 3; font-size: 26px; }
+.hero-photo-note b { font: 700 14px var(--font-head); }
+.hero-photo-note small { opacity: .72; }
+.home-content { width: min(1120px, calc(100% - 48px)); margin: 0 auto; padding: 86px 0 110px; }
+.home-heading h2 { margin: 0 0 44px; font-size: clamp(38px, 5vw, 68px); line-height: .98; letter-spacing: -.03em; }
+.chapter-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.chapter-card { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 18px; min-height: 132px; align-items: center; width: 100%; padding: 22px; border: 1px solid var(--c-muted); border-radius: 20px; background: #fff; color: var(--c-ink); text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.chapter-card:hover { transform: translateY(-3px); border-color: var(--c-brand); box-shadow: var(--shadow); }
+.chapter-num { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--c-cream); color: var(--c-brand-dk); font: 700 18px var(--font-head); }
+.chapter-copy { display: grid; gap: 7px; }
+.chapter-copy b { font: 700 21px/1.05 var(--font-head); }
+.chapter-copy small { color: #76584c; font-size: 14px; line-height: 1.35; }
+.chapter-arrow { font-size: 25px; }
+.chapter-lock { display: none; }
+.chapter-card.locked { opacity: .5; pointer-events: none; }
+.chapter-card.locked .chapter-arrow { display: none; }
+.chapter-card.locked .chapter-lock { display: block; color: var(--c-muted); }
+
+.nav-inner { justify-content: flex-start; }
+#nav-chapter, #nav-progress { display: none; }
+
+/* Chapter heads */
+.chapter-hero { color: var(--c-ink); }
+.chapter-hero .content-wrap { padding-top: 76px; padding-bottom: 76px; }
+.chapter-hero h1 { max-width: 760px; margin: 10px 0 20px; font-size: clamp(48px, 7vw, 82px); line-height: .93; letter-spacing: -.04em; }
+.chapter-lead { max-width: 680px; margin: 0; font-size: clamp(18px, 2vw, 24px); line-height: 1.42; }
+.chapter-meta { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 58px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.tone-orange { background: #ff8732; }
+.tone-cream { background: #f5ebdc; }
+.tone-yellow { background: #ffcf4a; }
+.tone-dark { background: #24140f; color: #fff; }
+.tone-red { background: #d62300; color: #fff; }
+.tone-green { background: #198737; color: #fff; }
+.tone-purple { background: #6b3fa0; color: #fff; }
+.tone-summary { background: linear-gradient(120deg, #f5ebdc, #ffb25e); }
+
+/* Common content */
+.hook-card, .formula-card, .quiz-card, .pattern-card, .brief-card, .case-card, .resource-panel, .completion-card { border-radius: 26px; padding: clamp(24px, 5vw, 44px); background: #fff; border: 1px solid var(--c-muted); box-shadow: 0 14px 38px rgba(80,35,20,.08); }
+.hook-card { background: var(--c-cream); }
+.hook-card h2 { margin: 0 0 26px; font-size: clamp(32px, 5vw, 50px); line-height: 1; }
+.fear-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+.fear-grid span { padding: 16px; border-radius: 14px; background: #fff; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.hook-answer { margin: 26px 0 0; font-weight: 700; }
+.route-strip, .control-loop { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: stretch; }
+.route-strip div, .control-loop div { display: grid; gap: 7px; padding: 20px; border-radius: 18px; background: #fff; border: 1px solid var(--c-muted); }
+.route-strip b, .control-loop span { color: var(--c-brand-dk); font: 700 13px var(--font-head); }
+.route-strip i, .control-loop i { align-self: center; font-style: normal; font-size: 24px; color: var(--c-brand); }
+.control-loop b { font: 700 22px var(--font-head); }
+.control-loop small { color: #76584c; }
+.callout { display: block; padding: 24px 26px; border: 0; border-left: 6px solid var(--c-brand); border-radius: 0 18px 18px 0; background: var(--c-cream); }
+.callout strong { font: 700 21px var(--font-head); }
+.callout p { margin: 8px 0 0; }
+.callout-dark { border-color: #fff; background: var(--c-dark); color: #fff; }
+.callout-kicker { display: block; margin-bottom: 8px; color: var(--c-brand); font-size: 12px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+.section-title h2 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.04; }
+.bridge-note { display: flex; gap: 12px; padding: 22px; border-radius: 18px; background: var(--c-cream); line-height: 1.5; }
+.body-copy { max-width: 760px; }
+.body-copy p { margin: 0; }
+.flag-intro { padding: 28px 30px; border-left: 6px solid var(--c-danger); border-radius: 0 22px 22px 0; background: #ffe8e2; }
+.flag-intro h2 { color: var(--c-danger); }
+.flag-intro > p:not(.eyebrow) { max-width: 650px; margin: 14px 0 0; font-size: 17px; line-height: 1.5; }
+.interaction-hint { display: block; margin-top: 14px; color: #76584c; font-size: 13px; line-height: 1.4; }
+
+/* Formula + checks */
+.formula-card { background: var(--c-dark); color: #fff; }
+.formula-line { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: center; margin: 22px 0; }
+.formula-line span, .formula-line b { display: grid; place-items: center; min-height: 76px; padding: 12px; border-radius: 16px; background: var(--c-brand); text-align: center; font: 700 18px/1.2 var(--font-head); }
+.formula-line i { font-style: normal; font-size: 25px; }
+.quiz-top { display: flex; justify-content: space-between; gap: 20px; color: var(--c-brand-dk); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+.quiz-card h2 { margin: 22px 0 10px; font-size: clamp(26px, 4vw, 38px); line-height: 1.08; }
+.quiz-hint { color: #76584c; }
+.choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-top: 22px; }
+.choice-grid button, .choice-list button { min-height: 54px; padding: 15px 18px; border: 1px solid #d9cfc5; border-radius: 14px; background: #fff; color: var(--c-ink); font: 700 16px/1.35 var(--font-body); cursor: pointer; transition: border-color .18s, background .18s, transform .18s; }
+.choice-grid button:hover, .choice-list button:hover { transform: translateY(-1px); border-color: var(--c-brand); }
+.choice-grid button.correct-choice, .choice-list button.correct-choice { border-color: var(--c-success); background: #e8f5ea; color: #0f6427; }
+.choice-grid button.wrong-choice, .choice-list button.wrong-choice { border-color: var(--c-danger); background: #fff0ed; }
+.choice-list { display: grid; gap: 10px; margin-top: 22px; }
+.choice-list button { text-align: left; }
+.feedback-box { margin-top: 16px; font-size: 16px; line-height: 1.45; }
+.signal-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+.signal-pair article { display: flex; gap: 16px; padding: 22px; border: 1px solid var(--c-muted); border-radius: 18px; background: #fff; }
+.signal-pair b { font: 700 20px var(--font-head); }
+.signal-pair p { margin: 8px 0 0; font-size: 15px; }
+.signal-dot { flex: 0 0 16px; width: 16px; height: 16px; margin-top: 4px; border-radius: 50%; }
+.signal-dot.high { background: var(--c-danger); box-shadow: 0 0 0 7px #fde7e3; }
+.signal-dot.low { background: #2f7ed8; box-shadow: 0 0 0 7px #e6f1ff; }
+.pattern-card { background: var(--c-cream); }
+.pattern-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+.pattern-grid button { display: grid; gap: 7px; padding: 20px; border: 2px solid transparent; border-radius: 18px; background: #fff; color: var(--c-ink); text-align: left; cursor: pointer; }
+.pattern-grid button:hover, .pattern-grid button.active { border-color: var(--c-brand); }
+.pattern-grid button span { color: var(--c-brand-dk); font-weight: 700; }
+.pattern-grid button b { font: 700 20px var(--font-head); }
+.pattern-feedback { min-height: 76px; margin-top: 14px; padding: 18px; border-radius: 14px; background: #fff; line-height: 1.5; }
+.pattern-conclusion { padding: 28px 30px; border-radius: 22px; background: #fff4d2; border: 1px solid #f0ca55; }
+.pattern-conclusion h2 { margin: 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.08; }
+.pattern-conclusion p:last-child { margin: 14px 0 0; }
+
+/* Preparation */
+.prep-progress { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-radius: 14px; background: var(--c-dark); color: #fff; }
+.prep-progress b { font: 700 22px var(--font-head); }
+.prep-list { display: grid; gap: 12px; }
+.prep-list label { display: grid; grid-template-columns: auto auto 1fr; gap: 16px; align-items: start; padding: 22px; border: 1px solid var(--c-muted); border-radius: 20px; background: #fff; cursor: pointer; }
+.prep-list input { width: 22px; height: 22px; accent-color: var(--c-success); }
+.prep-num { color: var(--c-brand-dk); font: 700 13px var(--font-head); }
+.prep-list label > span:last-child { display: grid; gap: 7px; }
+.prep-list b { font: 700 22px var(--font-head); }
+.prep-list small { color: #76584c; font-size: 15px; line-height: 1.5; }
+.prep-list label:has(input:checked) { border-color: var(--c-success); background: #f0f8f1; }
+.brief-card { display: grid; grid-template-columns: .75fr 1.25fr; gap: 30px; align-items: center; background: var(--c-brand); color: #fff; }
+.brief-card h2 { margin: 8px 0 0; font-size: 36px; }
+.brief-card blockquote { margin: 0; padding-left: 22px; border-left: 3px solid rgba(255,255,255,.55); font-size: 18px; line-height: 1.55; }
+
+/* Controls and actions */
+.flag-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+.flag-grid button { display: grid; grid-template-columns: 44px 1fr; gap: 7px 14px; align-items: start; min-height: 150px; padding: 20px; border: 1px solid var(--c-muted); border-radius: 20px; background: #fff; color: var(--c-ink); text-align: left; cursor: pointer; }
+.flag-grid button > span { grid-row: 1 / 3; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: var(--c-cream); color: var(--c-brand-dk); font: 700 22px var(--font-head); }
+.flag-grid b { font: 700 19px/1.15 var(--font-head); }
+.flag-grid small { max-height: 0; overflow: hidden; opacity: 0; color: #76584c; font-size: 14px; line-height: 1.45; transition: max-height .25s, opacity .25s; }
+.flag-grid button.open { border-color: var(--c-brand); }
+.flag-grid button.open small { max-height: 110px; opacity: 1; }
+.action-tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; padding: 6px; border-radius: 18px; background: var(--c-cream); }
+.action-tabs button { min-height: 58px; padding: 12px; border: 0; border-radius: 13px; background: transparent; color: var(--c-ink); font-weight: 700; cursor: pointer; }
+.action-tabs button.active { background: var(--c-dark); color: #fff; }
+.action-panel { padding: 34px; border-radius: 24px; background: #fff; border: 1px solid var(--c-muted); }
+.action-panel-header { display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+.action-panel h2 { margin: 0; font-size: clamp(30px, 5vw, 46px); }
+.action-panel-tag { padding: 8px 12px; border-radius: 999px; background: var(--c-cream); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.action-steps { display: grid; gap: 10px; margin-top: 26px; }
+.action-steps div { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; padding: 15px; border-radius: 14px; background: var(--c-cream); }
+.action-steps span { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--c-brand-dk); color: #fff; font: 700 13px var(--font-head); }
+.action-steps p { margin: 2px 0 0; font-size: 16px; }
+
+/* Flip cards */
+.flip-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+.flip-card { position: relative; min-height: 260px; padding: 0; border: 0; border-radius: 22px; background: transparent; color: var(--c-ink); cursor: pointer; perspective: 1000px; }
+.flip-front, .flip-back { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 26px; border-radius: 22px; backface-visibility: hidden; transition: transform .55s ease; box-shadow: var(--shadow); text-align: left; }
+.flip-front { background: var(--c-cream); }
+.flip-back { background: var(--c-dark); color: #fff; transform: rotateY(180deg); }
+.flip-card.flipped .flip-front { transform: rotateY(180deg); }
+.flip-card.flipped .flip-back { transform: rotateY(360deg); }
+.flip-card small { color: var(--c-brand-dk); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.flip-back small { color: var(--c-brand); }
+.flip-card b { font: 700 26px/1.06 var(--font-head); }
+.flip-card i { color: #76584c; font-size: 13px; font-style: normal; }
+.flip-card p { margin: 0; font-size: 15px; }
+
+/* Practice + finish */
+.case-card { box-shadow: none; }
+.case-data { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: center; margin: -44px -44px 28px; padding: 20px 44px; border-radius: 26px 26px 0 0; background: #e9f4ff; }
+.case-data.hot { background: #ffe5df; }
+.case-data.neutral { background: #fff0be; }
+.case-data span { grid-row: 1 / 3; padding: 8px 12px; border-radius: 999px; background: #fff; font-weight: 700; }
+.case-data b { font: 700 28px var(--font-head); }
+.case-data small { color: #76584c; }
+.case-card h2 { font-size: clamp(26px, 4vw, 36px); }
+.practice-result { display: flex; gap: 16px; align-items: center; padding: 22px; border-radius: 18px; background: var(--c-dark); color: #fff; }
+.practice-result span { font: 700 32px var(--font-head); color: var(--c-brand); }
+.practice-result p { margin: 0; }
+.takeaway-list { display: grid; gap: 10px; }
+.takeaway-list article { display: grid; grid-template-columns: 62px 1fr; gap: 20px; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--c-muted); }
+.takeaway-list span { color: var(--c-brand-dk); font: 700 18px var(--font-head); }
+.takeaway-list p { margin: 0; }
+.resource-panel { display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: center; background: var(--c-cream); }
+.resource-panel h2 { margin: 0 0 10px; font-size: 34px; }
+.resource-panel p { margin: 0; }
+.completion-card { display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; background: var(--c-dark); color: #fff; }
+.completion-mark { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: var(--c-success); font-size: 30px; }
+.completion-card h2 { margin: 0 0 6px; }
+.completion-card p { margin: 0; font-size: 15px; color: #e8ded1; }
+.completion-panel { display: none; padding: 20px; border-radius: 16px; background: #e8f5ea; color: #0f6427; }
+.completion-panel.show { display: block; }
+
+@media (max-width: 780px) {
+  body { padding-top: 54px; }
+  .hero-placeholder { min-height: 720px; align-items: end; }
+  .hero-copy { width: calc(100% - 36px); padding: 70px 0 72px; }
+  .hero-copy h1 { font-size: clamp(48px, 14vw, 72px); }
+  .hero-photo-note { left: 18px; right: auto; bottom: 24px; }
+  .home-content { width: calc(100% - 32px); padding: 64px 0 80px; }
+  .chapter-grid, .fear-grid, .signal-pair, .pattern-grid, .flag-grid, .flip-grid { grid-template-columns: 1fr; }
+  .chapter-card { min-height: 116px; grid-template-columns: 1fr auto; padding: 18px; }
+  .content-wrap { padding: 44px 18px 76px; }
+  .chapter-hero .content-wrap { padding-top: 52px; padding-bottom: 58px; }
+  .chapter-meta { margin-bottom: 42px; }
+  .route-strip, .control-loop, .formula-line { grid-template-columns: 1fr; }
+  .route-strip i, .control-loop i, .formula-line i { transform: rotate(90deg); justify-self: center; }
+  .choice-grid, .brief-card, .action-tabs { grid-template-columns: 1fr; }
+  .action-panel-header { display: grid; }
+  .action-panel-tag { justify-self: start; }
+  .case-data { margin: -24px -24px 24px; padding: 18px 24px; }
+  .resource-panel, .completion-card { grid-template-columns: 1fr; }
+  .completion-mark { width: 50px; height: 50px; }
+  .next-row .btn-primary, .resource-panel .btn-secondary, .completion-card .btn-primary { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .fade-in { opacity: 1; transform: none; }
+}

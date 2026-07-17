@@ -1,0 +1,13 @@
+/* KU Design System: ядро + используемые компоненты курса */
+@import "tokens/palette.css";
+@import "tokens/colors.css";
+@import "tokens/scales.css";
+@import "tokens/subsections.css";
+
+@import "base/fonts.css";
+@import "base/reset.css";
+@import "base/typography.css";
+
+@import "layout.css";
+
+@import "components/nav.css";

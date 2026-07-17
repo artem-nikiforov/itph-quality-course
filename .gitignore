@@ -1,0 +1,7 @@
+tmp/
+*.zip
+*.docx
+*.pyc
+scorm_pack.py
+fonts/FLAME-REGULAR.OTF
+fonts/FLAME-BOLD.OTF

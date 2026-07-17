@@ -1,0 +1,51 @@
+/* Трек МС, направление «Люди». */
+:root {
+  --ku-brand: var(--ku__ms-lyudi);
+  --ku-contrast: var(--ku__ms-lyudi-contrast);
+  --ku-contrast-on: var(--ku__white);
+  --ku-brand-strong: color-mix(in srgb, var(--ku-brand) 82%, var(--ku__black));
+  --ku-brand-press: color-mix(in srgb, var(--ku-brand) 64%, var(--ku__black));
+  --ku-brand-ring: color-mix(in srgb, var(--ku-brand) 45%, transparent);
+  --ku-brand-soft: color-mix(in srgb, var(--ku-brand) 12%, var(--ku__white));
+  --ku-shadow-brand: 0 10px 28px color-mix(in srgb, var(--ku-brand) 35%, transparent);
+  --ku-grad-brand: linear-gradient(135deg, var(--ku-brand), var(--ku-contrast));
+  --ku-grad-brand-soft: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ku-brand) 14%, var(--ku__white)),
+    color-mix(in srgb, var(--ku-contrast) 12%, var(--ku__white))
+  );
+}
+
+:root[data-audience="ms"] {
+  --ku-audience-name: "МС";
+  --ku-font-display: "Montserrat", system-ui, sans-serif;
+  --ku-font-body: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ku-bg: var(--ku__white);
+  --ku-surface: color-mix(in srgb, var(--ku-brand) 5%, var(--ku__white));
+  --ku-surface-2: color-mix(in srgb, var(--ku-brand) 9%, var(--ku__cream-50));
+  --ku-card: var(--ku__white);
+  --ku-elevated: var(--ku__white);
+
+  --ku-text: color-mix(in srgb, var(--ku-brand) 18%, var(--ku__black));
+  --ku-text-soft: color-mix(in srgb, var(--ku-text) 72%, transparent);
+  --ku-text-muted: color-mix(in srgb, var(--ku-text) 48%, transparent);
+  --ku-text-on-dark: var(--ku__white);
+
+  --ku-border: color-mix(in srgb, var(--ku-brand) 20%, var(--ku__cream-300));
+  --ku-border-soft: color-mix(in srgb, var(--ku-brand) 10%, var(--ku__cream-200));
+  --ku-divider: color-mix(in srgb, var(--ku-brand) 12%, var(--ku__cream-200));
+
+  --ku-shadow-xs: 0 1px 2px color-mix(in srgb, var(--ku-text) 6%, transparent);
+  --ku-shadow-s: 0 2px 8px color-mix(in srgb, var(--ku-text) 8%, transparent);
+  --ku-shadow-m: 0 8px 24px color-mix(in srgb, var(--ku-text) 12%, transparent);
+  --ku-shadow-l: 0 18px 48px color-mix(in srgb, var(--ku-text) 16%, transparent);
+}
+
+:root[data-audience="ms"][data-direction="lyudi"] {
+  --ku-direction-name: "Люди";
+  --ku-brand: var(--ku__ms-lyudi);
+  --ku-contrast: var(--ku__ms-lyudi-contrast);
+  --ku-brand-on: var(--ku__black);
+  --ku-contrast-on: var(--ku__black);
+}

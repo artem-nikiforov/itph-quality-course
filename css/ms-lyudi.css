@@ -1,0 +1,641 @@
+/* Тема курса: МС · Люди. Все цвета и геометрия приходят из KU-токенов. */
+:root {
+  --c-brand: var(--ku-brand);
+  --c-brand-dk: var(--ku-brand-strong);
+  --c-success: var(--ku-success);
+  --c-warning: var(--ku-warning);
+  --c-danger: var(--ku-danger);
+  --c-ink: var(--ku-text);
+  --c-cream: var(--ku-surface);
+  --c-paper: var(--ku-bg);
+  --c-muted: var(--ku-border);
+  --c-dark: var(--ku-text);
+  --c-purple: var(--ku-contrast);
+  --font-head: var(--ku-font-display);
+  --font-body: var(--ku-font-body);
+  --radius-sm: var(--ku-radius-s);
+  --radius: var(--ku-radius-m);
+  --radius-lg: var(--ku-radius-l);
+  --shadow: var(--ku-shadow-m);
+  --content-max: 48rem;
+}
+
+body {
+  color: var(--ku-text);
+  background: var(--ku-bg);
+  font-family: var(--ku-font-body);
+}
+
+h1, h2, h3, h4, h5,
+.chapter-copy b,
+.formula-line span,
+.formula-line b {
+  font-family: var(--ku-font-display);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline-color: var(--ku-brand);
+}
+
+/* Навигация */
+#top-nav {
+  background: color-mix(in srgb, var(--ku-bg) 88%, transparent);
+  border-bottom: var(--ku-border-w) solid var(--ku-border-soft);
+  box-shadow: none;
+  backdrop-filter: saturate(1.4) blur(12px);
+}
+
+.nav-inner {
+  width: min(72rem, calc(100% - var(--ku-space-l)));
+  max-width: none;
+  min-height: 3.3rem;
+  padding: var(--ku-space-2xs) 0;
+}
+
+.nav-home-btn {
+  min-height: 2.25rem;
+  padding: 0 var(--ku-space-xs);
+  border-radius: var(--ku-radius-pill);
+  color: var(--ku-text-soft);
+  font-weight: 650;
+}
+
+.nav-home-btn:hover {
+  color: var(--ku-brand-strong);
+  background: var(--ku-brand-soft);
+}
+
+#progress-bar-wrap {
+  height: 0.25rem;
+  background: var(--ku-surface-2);
+}
+
+#progress-bar {
+  height: 100%;
+  background: var(--ku-grad-brand);
+}
+
+/* Кнопки */
+.btn-primary,
+.btn-secondary {
+  min-height: 3.25rem;
+  padding: var(--ku-space-xs) var(--ku-space-m);
+  border-radius: var(--ku-radius-m);
+  font-family: var(--ku-font-body);
+  font-weight: 750;
+  transition: transform var(--ku-dur-fast) var(--ku-ease-out),
+              box-shadow var(--ku-dur-base) var(--ku-ease),
+              background-color var(--ku-dur-fast) var(--ku-ease);
+}
+
+.btn-primary {
+  background: var(--ku-brand);
+  color: var(--ku-brand-on);
+  box-shadow: var(--ku-shadow-brand);
+}
+
+.btn-primary:hover {
+  background: var(--ku-brand-strong);
+  box-shadow: var(--ku-shadow-brand);
+}
+
+.btn-secondary {
+  color: var(--ku-brand-strong);
+  border-color: var(--ku-brand);
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  background: var(--ku-brand-soft);
+}
+
+/* Обложка без фотографии */
+.hero-placeholder {
+  min-height: min(46rem, calc(100vh - 3.5rem));
+  color: var(--ku-text);
+  background: var(--ku-grad-brand-soft);
+  isolation: isolate;
+}
+
+.hero-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--ku-contrast) 25%, transparent) 0 10%, transparent 10.5%),
+    radial-gradient(circle at 76% 72%, color-mix(in srgb, var(--ku-brand) 22%, transparent) 0 18%, transparent 18.5%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero-pattern {
+  display: block;
+  opacity: 0.48;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ku-brand) 13%, transparent) var(--ku-border-w), transparent var(--ku-border-w)),
+    linear-gradient(90deg, color-mix(in srgb, var(--ku-brand) 13%, transparent) var(--ku-border-w), transparent var(--ku-border-w));
+  background-size: 3.5rem 3.5rem;
+  mask-image: linear-gradient(90deg, transparent, var(--ku__black));
+}
+
+.hero-pattern::after {
+  width: 25rem;
+  height: 25rem;
+  border: 5rem solid color-mix(in srgb, var(--ku-contrast) 18%, transparent);
+  right: -5rem;
+}
+
+.ku-bk-logo {
+  top: var(--ku-space-l);
+  right: var(--ku-space-l);
+}
+
+.hero-copy {
+  width: min(72rem, calc(100% - var(--ku-space-l)));
+  padding: var(--ku-space-2xl) 0;
+}
+
+.hero-copy h1 {
+  max-width: 50rem;
+  margin: 0 0 var(--ku-space-m);
+  color: var(--ku-text);
+  font-size: clamp(3rem, 1.8rem + 5vw, 6.4rem);
+  font-weight: 820;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+}
+
+.hero-copy p {
+  max-width: 39rem;
+  margin: 0 0 var(--ku-space-l);
+  color: var(--ku-text-soft);
+  font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.35rem);
+}
+
+/* Главная и карточки глав */
+.home-content {
+  width: min(72rem, calc(100% - var(--ku-space-l)));
+  padding: var(--ku-space-xl) 0 var(--ku-space-2xl);
+}
+
+.home-heading h2 {
+  margin-bottom: var(--ku-space-l);
+  color: var(--ku-text);
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.8rem);
+  font-weight: 780;
+}
+
+.chapter-grid {
+  gap: var(--ku-gap-m);
+}
+
+.chapter-card {
+  overflow: hidden;
+  min-height: 8.25rem;
+  padding: var(--ku-space-m);
+  border: var(--ku-border-w) solid var(--ku-border);
+  border-radius: var(--ku-radius-l);
+  color: var(--ku-text);
+  background: var(--ku-card);
+  box-shadow: var(--ku-shadow-s);
+  transition: transform var(--ku-dur-base) var(--ku-ease-out),
+              box-shadow var(--ku-dur-base) var(--ku-ease),
+              border-color var(--ku-dur-base) var(--ku-ease);
+}
+
+.chapter-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.3rem;
+  background: var(--ku-grad-brand);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--ku-dur-base) var(--ku-ease-out);
+}
+
+.chapter-card:hover {
+  transform: translateY(-0.25rem);
+  border-color: color-mix(in srgb, var(--ku-brand) 45%, var(--ku-border));
+  box-shadow: var(--ku-shadow-m);
+}
+
+.chapter-card:hover::before {
+  transform: scaleY(1);
+}
+
+.chapter-copy b {
+  color: var(--ku-text);
+  font-size: 1.08rem;
+  font-weight: 760;
+}
+
+.chapter-copy small {
+  color: var(--ku-text-muted);
+}
+
+.chapter-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--ku-radius-pill);
+  color: var(--ku-brand-strong);
+  background: var(--ku-brand-soft);
+}
+
+.chapter-card.locked {
+  opacity: 0.48;
+  filter: grayscale(0.32);
+}
+
+/* Заголовки глав */
+.chapter-hero {
+  display: grid;
+  align-items: center;
+  height: 28rem;
+  color: var(--ku-text);
+  background: var(--ku-grad-brand-soft);
+}
+
+.chapter-hero .content-wrap {
+  width: 100%;
+  padding-top: var(--ku-space-l);
+  padding-bottom: var(--ku-space-l);
+}
+
+.chapter-hero h1 {
+  color: currentColor;
+  font-size: clamp(2.6rem, 1.5rem + 4.5vw, 5rem);
+  font-weight: 800;
+  line-height: 0.98;
+}
+
+.chapter-lead {
+  color: currentColor;
+  opacity: 0.78;
+}
+
+.tone-orange,
+.tone-cream {
+  background: var(--ku-brand-soft);
+}
+
+.tone-yellow,
+.tone-summary {
+  background: var(--ku-grad-brand-soft);
+}
+
+.tone-dark,
+.tone-green {
+  color: var(--ku-text-on-dark);
+  background: var(--ku-brand-strong);
+}
+
+.tone-red,
+.tone-purple {
+  color: var(--ku-contrast-on);
+  background: var(--ku-contrast);
+}
+
+/* Контентные поверхности */
+.content-wrap {
+  padding: var(--ku-space-xl) var(--ku-space-s) var(--ku-space-2xl);
+}
+
+.lesson-body > * + * {
+  margin-top: var(--ku-space-l);
+}
+
+.lesson-body p {
+  color: var(--ku-text-soft);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.eyebrow,
+.callout-kicker,
+.quiz-top,
+.prep-num {
+  color: var(--ku-brand-strong);
+}
+
+.hook-card,
+.formula-card,
+.quiz-card,
+.pattern-card,
+.brief-card,
+.case-card,
+.resource-panel,
+.completion-card,
+.action-panel {
+  border: var(--ku-border-w) solid var(--ku-border);
+  border-radius: var(--ku-radius-l);
+  background: var(--ku-card);
+  box-shadow: var(--ku-shadow-s);
+}
+
+.hook-card,
+.pattern-card,
+.resource-panel {
+  background: var(--ku-surface);
+}
+
+.fear-grid span,
+.route-strip div,
+.control-loop div,
+.signal-pair article,
+.prep-list label,
+.flag-grid button,
+.pattern-grid button,
+.pattern-feedback,
+.choice-grid button,
+.choice-list button {
+  color: var(--ku-text);
+  border-color: var(--ku-border);
+  background: var(--ku-card);
+  border-radius: var(--ku-radius-m);
+}
+
+.route-strip b,
+.control-loop span,
+.pattern-grid button span,
+.flag-grid button > span,
+.takeaway-list span {
+  color: var(--ku-brand-strong);
+}
+
+.callout,
+.bridge-note {
+  border-color: var(--ku-brand);
+  background: var(--ku-brand-soft);
+  border-radius: 0 var(--ku-radius-m) var(--ku-radius-m) 0;
+}
+
+.callout-dark {
+  color: var(--ku-text-on-dark);
+  background: var(--ku-brand-strong);
+}
+
+.lesson-body .callout-dark p {
+  color: var(--ku__white);
+}
+
+.flag-intro {
+  border-color: var(--ku-contrast);
+  background: color-mix(in srgb, var(--ku-contrast) 11%, var(--ku-card));
+}
+
+.flag-intro h2 {
+  color: color-mix(in srgb, var(--ku-contrast) 78%, var(--ku-text));
+}
+
+.interaction-hint,
+.quiz-hint,
+.control-loop small,
+.prep-list small,
+.flag-grid small,
+.flip-card i,
+.case-data small {
+  color: var(--ku-text-muted);
+}
+
+/* Формула и задания */
+.formula-card {
+  color: var(--ku-text);
+  background: var(--ku-grad-brand-soft);
+}
+
+.formula-card p {
+  color: var(--ku-text-soft);
+}
+
+.formula-line span,
+.formula-line b {
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+  border-radius: var(--ku-radius-m);
+}
+
+.choice-grid button:hover,
+.choice-list button:hover,
+.pattern-grid button:hover,
+.pattern-grid button.active,
+.flag-grid button.open {
+  border-color: var(--ku-brand);
+}
+
+.choice-grid button.correct-choice,
+.choice-list button.correct-choice,
+.prep-list label:has(input:checked) {
+  color: var(--ku-success);
+  border-color: var(--ku-success);
+  background: var(--ku-success-soft);
+}
+
+.choice-grid button.wrong-choice,
+.choice-list button.wrong-choice {
+  border-color: var(--ku-danger);
+  background: var(--ku-danger-soft);
+}
+
+.pattern-conclusion {
+  border-color: color-mix(in srgb, var(--ku-contrast) 42%, var(--ku-border));
+  background: color-mix(in srgb, var(--ku-contrast) 10%, var(--ku-card));
+}
+
+.prep-progress,
+.practice-result,
+.completion-card {
+  color: var(--ku-text-on-dark);
+  background: var(--ku-brand-strong);
+}
+
+.brief-card {
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+}
+
+.flag-grid button > span,
+.action-panel-tag,
+.action-steps div,
+.flip-front {
+  background: var(--ku-brand-soft);
+}
+
+.action-tabs {
+  background: var(--ku-surface-2);
+}
+
+.action-tabs button.active,
+.action-steps span {
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+}
+
+.flip-back {
+  color: var(--ku-text-on-dark);
+  background: var(--ku-brand-strong);
+}
+
+.flip-back small,
+.practice-result span {
+  color: var(--ku-contrast);
+}
+
+.case-data,
+.case-data.hot,
+.case-data.neutral {
+  background: var(--ku-grad-brand-soft);
+}
+
+.case-data span {
+  background: var(--ku-card);
+}
+
+.takeaway-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ku-gap-m);
+}
+
+.takeaway-list article {
+  min-height: 7rem;
+  padding: var(--ku-space-m);
+  border: var(--ku-border-w) solid var(--ku-border);
+  border-radius: var(--ku-radius-l);
+  background: var(--ku-card);
+  box-shadow: var(--ku-shadow-s);
+}
+
+.takeaway-list article:last-child {
+  grid-column: 1 / -1;
+  background: var(--ku-brand-soft);
+}
+
+.takeaway-list span {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--ku-radius-m);
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+}
+
+.resource-panel {
+  position: relative;
+  overflow: hidden;
+  border-left: 0.35rem solid var(--ku-brand);
+  background: var(--ku-card);
+  box-shadow: var(--ku-shadow-m);
+}
+
+.resource-panel::after {
+  content: "";
+  position: absolute;
+  right: -4rem;
+  bottom: -5rem;
+  width: 12rem;
+  height: 12rem;
+  border-radius: var(--ku-radius-pill);
+  background: color-mix(in srgb, var(--ku-contrast) 14%, transparent);
+  pointer-events: none;
+}
+
+.resource-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.resource-panel h2 {
+  color: var(--ku-text);
+}
+
+.resource-panel .eyebrow {
+  display: inline-flex;
+  padding: var(--ku-space-2xs) var(--ku-space-xs);
+  border-radius: var(--ku-radius-pill);
+  color: var(--ku-contrast-on);
+  background: var(--ku-contrast);
+}
+
+.resource-panel .btn-secondary {
+  border-color: var(--ku-brand);
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+  box-shadow: var(--ku-shadow-brand);
+}
+
+.resource-panel .btn-secondary:hover {
+  color: var(--ku__white);
+  background: var(--ku-brand-strong);
+}
+
+.completion-card h2,
+.completion-card .btn-primary {
+  color: var(--ku__white);
+}
+
+.completion-card p {
+  color: color-mix(in srgb, var(--ku-text-on-dark) 75%, transparent);
+}
+
+.completion-panel {
+  color: var(--ku-success);
+  background: var(--ku-success-soft);
+}
+
+@media (max-width: 780px) {
+  .chapter-hero {
+    height: 23rem;
+  }
+
+  .chapter-hero .content-wrap {
+    padding-top: var(--ku-space-m);
+    padding-bottom: var(--ku-space-m);
+  }
+
+  .hero-placeholder {
+    min-height: 42rem;
+  }
+
+  .hero-copy {
+    width: calc(100% - var(--ku-space-l));
+    padding: var(--ku-space-2xl) 0 var(--ku-space-xl);
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.65rem, 13vw, 4.5rem);
+  }
+
+  .hero-pattern {
+    mask-image: linear-gradient(180deg, var(--ku__black), transparent);
+  }
+
+  .home-content {
+    width: calc(100% - var(--ku-space-l));
+  }
+
+  .takeaway-list {
+    grid-template-columns: 1fr;
+  }
+
+  .takeaway-list article:last-child {
+    grid-column: auto;
+  }
+
+  .ku-bk-logo {
+    top: var(--ku-space-s);
+    right: var(--ku-space-s);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-card,
+  .btn-primary,
+  .btn-secondary {
+    transition: none;
+  }
+}
