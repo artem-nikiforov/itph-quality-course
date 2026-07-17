@@ -111,45 +111,29 @@ input:focus-visible {
   background: var(--ku-brand-soft);
 }
 
-/* Обложка без фотографии */
+/* Обложка: изображение оставляет слева спокойную зону для текста. */
 .hero-placeholder {
   min-height: min(46rem, calc(100vh - 3.5rem));
   color: var(--ku-text);
-  background: var(--ku-grad-brand-soft);
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--ku-surface) 94%, transparent) 0%,
+      color-mix(in srgb, var(--ku-surface) 86%, transparent) 35%,
+      transparent 60%),
+    url("../assets/images/6708CA46-15E6-4EEC-A063-1A05C9A79D64.jpg") center / cover no-repeat;
   isolation: isolate;
 }
 
 .hero-placeholder::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--ku-contrast) 25%, transparent) 0 10%, transparent 10.5%),
-    radial-gradient(circle at 76% 72%, color-mix(in srgb, var(--ku-brand) 22%, transparent) 0 18%, transparent 18.5%);
-  pointer-events: none;
-  z-index: -1;
+  display: none;
 }
 
 .hero-pattern {
-  display: block;
-  opacity: 0.48;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--ku-brand) 13%, transparent) var(--ku-border-w), transparent var(--ku-border-w)),
-    linear-gradient(90deg, color-mix(in srgb, var(--ku-brand) 13%, transparent) var(--ku-border-w), transparent var(--ku-border-w));
-  background-size: 3.5rem 3.5rem;
-  mask-image: linear-gradient(90deg, transparent, var(--ku__black));
+  display: none;
 }
 
 .hero-pattern::after {
-  width: 25rem;
-  height: 25rem;
-  border: 5rem solid color-mix(in srgb, var(--ku-contrast) 18%, transparent);
-  right: -5rem;
-}
-
-.ku-bk-logo {
-  top: var(--ku-space-l);
-  right: var(--ku-space-l);
+  display: none;
 }
 
 .hero-copy {
@@ -158,17 +142,17 @@ input:focus-visible {
 }
 
 .hero-copy h1 {
-  max-width: 50rem;
+  max-width: 34rem;
   margin: 0 0 var(--ku-space-m);
   color: var(--ku-text);
-  font-size: clamp(3rem, 1.8rem + 5vw, 6.4rem);
+  font-size: clamp(3rem, 1.8rem + 4.2vw, 5.3rem);
   font-weight: 820;
   line-height: 0.96;
   letter-spacing: -0.045em;
 }
 
 .hero-copy p {
-  max-width: 39rem;
+  max-width: 30rem;
   margin: 0 0 var(--ku-space-l);
   color: var(--ku-text-soft);
   font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.35rem);
@@ -682,6 +666,7 @@ input:focus-visible {
 
   .hero-placeholder {
     min-height: 42rem;
+    background-position: 62% center;
   }
 
   .hero-copy {
@@ -709,10 +694,6 @@ input:focus-visible {
     grid-column: auto;
   }
 
-  .ku-bk-logo {
-    top: var(--ku-space-s);
-    right: var(--ku-space-s);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
