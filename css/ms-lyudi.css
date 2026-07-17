@@ -421,6 +421,61 @@ input:focus-visible {
   border-radius: var(--ku-radius-m);
 }
 
+.person-hours-arrow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0.75rem;
+  margin: -0.75rem 0 0.5rem;
+}
+
+.person-hours-arrow span {
+  grid-column: 3;
+  color: var(--ku-brand-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.person-hours-calc {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1.35fr;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0.25rem 0 1.25rem;
+}
+
+.person-hours-calc span,
+.person-hours-calc b {
+  display: grid;
+  min-height: 3.4rem;
+  place-items: center;
+  padding: 0.7rem;
+  border: var(--ku-border-w) solid var(--ku-border);
+  border-radius: var(--ku-radius-m);
+  color: var(--ku-brand-strong);
+  background: var(--ku-card);
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.person-hours-calc b {
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+}
+
+.person-hours-calc i {
+  color: var(--ku-brand-strong);
+  font-size: 1.4rem;
+  font-style: normal;
+}
+
+.formula-card .formula-example {
+  margin-bottom: 0;
+  color: var(--ku-text);
+}
+
 .choice-grid button:hover,
 .choice-list button:hover,
 .pattern-grid button:hover,
@@ -607,6 +662,20 @@ input:focus-visible {
 }
 
 @media (max-width: 780px) {
+  .person-hours-arrow,
+  .person-hours-calc {
+    grid-template-columns: 1fr;
+  }
+
+  .person-hours-arrow span {
+    grid-column: auto;
+  }
+
+  .person-hours-calc i {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+
   .chapter-hero {
     height: 23rem;
   }
