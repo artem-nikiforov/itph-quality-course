@@ -130,7 +130,7 @@ function initFadeIn() {
    ВАЖНО про статус: «Завершён» НЕ ставим автоматически — только по кнопке
    «Завершить» (SCORM.complete()). Прогресс открытия глав хранится отдельно.
    ════════════════════════════════════════════════════════════════════════ */
-const PROGRESS_KEY = 'itph_quality_progress_v4';
+const PROGRESS_KEY = 'itph_quality_progress_v5';
 const hubDone = [false, false, false];   // флаги пройденных подразделов (если есть)
 
 function collectState() {

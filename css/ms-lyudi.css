@@ -351,6 +351,15 @@ input:focus-visible {
   border-radius: var(--ku-radius-m);
 }
 
+.fear-grid span {
+  position: relative;
+  padding: 1rem 1rem 1rem 1.3rem;
+  border-left: 0.3rem solid var(--ku-brand);
+  background: var(--ku-brand-soft);
+  box-shadow: none;
+  font-weight: 750;
+}
+
 .route-strip b,
 .control-loop span,
 .pattern-grid button span,
@@ -381,30 +390,56 @@ input:focus-visible {
   background: color-mix(in srgb, var(--ku-contrast) 11%, var(--ku-card));
 }
 
-.signal-pair .signal-focus {
-  margin-top: var(--ku-space-s);
-  padding: 0.7rem 0.8rem;
-  border-left: 0.25rem solid var(--ku-brand);
-  border-radius: 0 var(--ku-radius-s) var(--ku-radius-s) 0;
-  color: var(--ku-text);
-  background: var(--ku-brand-soft);
-  font-weight: 750;
-}
-
 .signal-pair article {
-  min-height: 22.5rem;
+  min-height: 0;
+  gap: 0;
   align-items: stretch;
+  overflow: hidden;
+  border-radius: var(--ku-radius-l);
 }
 
 .signal-pair article > div {
-  display: flex;
+  display: grid;
   flex: 1;
-  flex-direction: column;
-  justify-content: center;
+  grid-template-rows: auto 1fr auto;
+  padding: var(--ku-space-l);
 }
 
 .signal-pair .signal-dot {
-  align-self: center;
+  align-self: stretch;
+  flex: 0 0 0.5rem;
+  width: 0.5rem;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.signal-pair .signal-dot.high,
+.signal-pair .signal-dot.low {
+  box-shadow: none;
+}
+
+.signal-pair article b {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.signal-pair article > div > p:not(.signal-focus) {
+  margin: 0;
+  color: var(--ku-text-soft);
+  line-height: 1.48;
+}
+
+.signal-pair .signal-focus {
+  margin: 1.2rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 0;
+  border-radius: var(--ku-radius-m);
+  color: var(--ku-text);
+  background: var(--ku-brand-soft);
+  font-weight: 750;
+  line-height: 1.42;
 }
 
 .schedule-callout {
