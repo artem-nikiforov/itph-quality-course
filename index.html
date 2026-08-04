@@ -8,7 +8,7 @@
   <title>Как работать с ITPH на смене</title>
   <link rel="stylesheet" href="css/kuds.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="css/ms-lyudi.css?v=20260804-4">
+  <link rel="stylesheet" href="css/ms-lyudi.css?v=20260804-5">
 </head>
 <body>
   <nav id="top-nav" aria-label="Навигация по курсу">
@@ -92,9 +92,7 @@
       <div class="content-wrap lesson-body">
         <div class="formula-card fade-in">
           <p class="eyebrow">Формула</p>
-          <div class="formula-line"><b>ITPH</b><i>=</i><span>проданные позиции</span><i>÷</i><span>человеко-часы сотрудников</span></div>
-          <div class="person-hours-arrow" aria-hidden="true"><span>↓ Так считаются человеко-часы</span></div>
-          <div class="person-hours-calc" aria-label="3 сотрудника умножить на 2 часа равно 6 человеко-часов"><span>3 сотрудника</span><i>×</i><span>2 часа</span><i>=</i><b>6 человеко-часов</b></div>
+          <div class="formula-line"><b>ITPH</b><i>=</i><span>проданные позиции</span><i>÷</i><button class="person-hours-trigger" type="button" onclick="openPersonHours()">человеко-часы сотрудников <small>Нажми, чтобы посмотреть расчёт</small></button></div>
           <p>За это время ресторан продал 126 позиций.</p>
           <p class="formula-example"><strong>Пример расчёта ITPH: 126 позиций ÷ 6 человеко-часов = 21.</strong></p>
         </div>
@@ -148,7 +146,7 @@
         <div class="prep-progress fade-in"><span>Отметь каждый шаг</span><b id="prep-count">0 / 3</b></div>
         <div class="prep-list fade-in">
           <label><input type="checkbox" onchange="updatePrep()"><span class="prep-num">01</span><span><b>Возьми ориентир</b><small>Открой Brave&amp;Bold: сверь цель и учти отклонения по ITPH на похожих сменах. Это поможет заранее подготовиться к резкому наплыву или отсутствию трафика.</small></span></label>
-          <label><input type="checkbox" onchange="updatePrep()"><span class="prep-num">02</span><span><b>Учти это в расстановке</b><small>Используй отклонения ITPH на похожих сменах, когда планируешь расстановку на свою смену: заранее проверь, кто сможет усилить западающую зону в ожидаемый пик.</small></span></label>
+          <label><input type="checkbox" onchange="updatePrep()"><span class="prep-num">02</span><span><b>Учти это в расстановке</b><small>Используй отклонения ITPH на похожих сменах, когда планируешь расстановку на свою смену: заранее подумай, кого можно привлечь для усиления западающей зоны в ожидаемый пик.</small></span></label>
           <label><input type="checkbox" onchange="updatePrep()"><span class="prep-num">03</span><span><b>Поставь сотрудникам понятные цели</b><small>У каждого сотрудника должна быть конкретная и понятная цель по SMART. К пику готовимся заранее: сотрудник знает, где стоит, что делает и когда зовёт помощь.</small></span></label>
         </div>
 
@@ -310,7 +308,7 @@
 
         <div class="resource-panel fade-in">
           <div><p class="eyebrow">Забери с собой</p><h2>Карманная шпаргалка по ITPH</h2><p>Открой её перед сменой, держи рядом в пик и заполни выводы после закрытия.</p></div>
-          <a class="btn-secondary" href="output/pdf/itph-cheatsheet.pdf?v=20260804-4" download>↓ Скачать PDF</a>
+          <a class="btn-secondary" href="output/pdf/itph-cheatsheet.pdf?v=20260804-5" download>↓ Скачать PDF</a>
         </div>
 
         <div class="completion-card fade-in">
@@ -321,8 +319,17 @@
         <div class="completion-panel" id="completion-panel" role="status"><b>Курс завершён.</b> Результат сохранён. Теперь можно вернуться к любой главе с главной страницы.</div>
       </div>
     </section>
+
+    <dialog class="person-hours-dialog" id="person-hours-dialog" aria-labelledby="person-hours-title">
+      <button class="dialog-close" type="button" onclick="closePersonHours()" aria-label="Закрыть">×</button>
+      <p class="eyebrow">Расчёт</p>
+      <h2 id="person-hours-title">Как считаются человеко-часы</h2>
+      <p>Это время работы всех сотрудников на смене.</p>
+      <div class="person-hours-calc" aria-label="3 сотрудника умножить на 2 часа равно 6 человеко-часов"><span>3 сотрудника</span><i>×</i><span>2 часа</span><i>=</i><b>6 человеко-часов</b></div>
+      <p class="formula-example"><strong>Например: 3 сотрудника работали 2 часа. Получается 6 человеко-часов.</strong></p>
+    </dialog>
   </main>
 
-  <script src="script.js?v=20260804-4"></script>
+  <script src="script.js?v=20260804-5"></script>
 </body>
 </html>

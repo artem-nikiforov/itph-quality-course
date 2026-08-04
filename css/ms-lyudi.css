@@ -29,7 +29,8 @@ body {
 h1, h2, h3, h4, h5,
 .chapter-copy b,
 .formula-line span,
-.formula-line b {
+.formula-line b,
+.formula-line .person-hours-trigger {
   font-family: var(--ku-font-display);
 }
 
@@ -390,6 +391,22 @@ input:focus-visible {
   font-weight: 750;
 }
 
+.signal-pair article {
+  min-height: 22.5rem;
+  align-items: stretch;
+}
+
+.signal-pair article > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signal-pair .signal-dot {
+  align-self: center;
+}
+
 .schedule-callout {
   position: relative;
   overflow: hidden;
@@ -450,10 +467,75 @@ input:focus-visible {
 }
 
 .formula-line span,
-.formula-line b {
+.formula-line b,
+.formula-line .person-hours-trigger {
   color: var(--ku-brand-on);
   background: var(--ku-brand);
   border-radius: var(--ku-radius-m);
+}
+
+.formula-line .person-hours-trigger {
+  display: grid;
+  min-height: 4.75rem;
+  place-items: center;
+  gap: 0.28rem;
+  padding: 0.75rem;
+  border: 0;
+  font: 700 1.1rem/1.15 var(--ku-font-display);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.formula-line .person-hours-trigger:hover,
+.formula-line .person-hours-trigger:focus-visible {
+  color: var(--ku-brand-on);
+  background: var(--ku-brand-strong);
+  transform: translateY(-0.12rem);
+}
+
+.formula-line .person-hours-trigger small {
+  color: color-mix(in srgb, var(--ku-brand-on) 78%, transparent);
+  font: 700 0.68rem/1.2 var(--ku-font-body);
+}
+
+.person-hours-dialog {
+  width: min(42rem, calc(100% - 2rem));
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 0;
+  border-radius: var(--ku-radius-l);
+  color: var(--ku-text);
+  background: var(--ku-card);
+  box-shadow: var(--ku-shadow-m);
+}
+
+.person-hours-dialog::backdrop {
+  background: color-mix(in srgb, var(--ku-brand-strong) 68%, transparent);
+}
+
+.person-hours-dialog h2 {
+  margin: 0.25rem 2.5rem 0.6rem 0;
+}
+
+.person-hours-dialog > p:not(.eyebrow) {
+  color: var(--ku-text-soft);
+}
+
+.dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ku-brand-on);
+  background: var(--ku-brand);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .person-hours-arrow {
@@ -779,6 +861,10 @@ input:focus-visible {
   .person-hours-calc i {
     justify-self: center;
     transform: rotate(90deg);
+  }
+
+  .signal-pair article {
+    min-height: auto;
   }
 
   .chapter-hero {

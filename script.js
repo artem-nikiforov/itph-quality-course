@@ -528,6 +528,14 @@ function toggleFlag(btn) {
   btn.setAttribute('aria-expanded', String(isOpen));
 }
 
+function openPersonHours() {
+  document.getElementById('person-hours-dialog')?.showModal();
+}
+
+function closePersonHours() {
+  document.getElementById('person-hours-dialog')?.close();
+}
+
 const ACTIONS = {
   high: {
     title: 'Команда перегружена',
