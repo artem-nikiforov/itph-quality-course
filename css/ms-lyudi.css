@@ -390,8 +390,15 @@ input:focus-visible {
   background: color-mix(in srgb, var(--ku-contrast) 11%, var(--ku-card));
 }
 
+.signal-pair {
+  grid-template-columns: 1fr;
+  gap: var(--ku-gap-m);
+}
+
 .signal-pair article {
-  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.5rem minmax(12rem, 0.36fr) 1fr;
+  grid-template-rows: 1fr auto;
   gap: 0;
   align-items: stretch;
   overflow: hidden;
@@ -399,16 +406,13 @@ input:focus-visible {
 }
 
 .signal-pair article > div {
-  display: grid;
-  flex: 1;
-  grid-template-rows: auto 1fr auto;
-  padding: var(--ku-space-l);
+  display: contents;
 }
 
 .signal-pair .signal-dot {
-  align-self: stretch;
-  flex: 0 0 0.5rem;
-  width: 0.5rem;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: auto;
   height: auto;
   margin: 0;
   border-radius: 0;
@@ -421,25 +425,39 @@ input:focus-visible {
 }
 
 .signal-pair article b {
-  margin-bottom: 0.75rem;
-  font-size: 1.25rem;
+  display: grid;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-content: center;
+  margin: 0;
+  padding: var(--ku-space-l);
+  color: var(--ku-text);
+  background: var(--ku-surface-2);
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  line-height: 1.05;
 }
 
 .signal-pair article > div > p:not(.signal-focus) {
+  grid-column: 3;
+  grid-row: 1;
   margin: 0;
+  padding: var(--ku-space-l) var(--ku-space-l) var(--ku-space-s);
   color: var(--ku-text-soft);
-  line-height: 1.48;
+  line-height: 1.5;
 }
 
 .signal-pair .signal-focus {
-  margin: 1.2rem 0 0;
-  padding: 0.9rem 1rem;
+  grid-column: 3;
+  grid-row: 2;
+  margin: 0;
+  padding: 1rem var(--ku-space-l) var(--ku-space-l);
   border: 0;
-  border-radius: var(--ku-radius-m);
+  border-top: var(--ku-border-w) solid var(--ku-border);
+  border-radius: 0;
   color: var(--ku-text);
   background: var(--ku-brand-soft);
   font-weight: 750;
-  line-height: 1.42;
+  line-height: 1.45;
 }
 
 .schedule-callout {
@@ -900,6 +918,26 @@ input:focus-visible {
 
   .signal-pair article {
     min-height: auto;
+    grid-template-columns: 0.45rem 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .signal-pair article b {
+    grid-column: 2;
+    grid-row: 1;
+    padding: var(--ku-space-m);
+  }
+
+  .signal-pair article > div > p:not(.signal-focus) {
+    grid-column: 2;
+    grid-row: 2;
+    padding: var(--ku-space-m);
+  }
+
+  .signal-pair .signal-focus {
+    grid-column: 2;
+    grid-row: 3;
+    padding: var(--ku-space-m);
   }
 
   .chapter-hero {
