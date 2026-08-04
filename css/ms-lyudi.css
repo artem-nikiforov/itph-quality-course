@@ -660,10 +660,6 @@ input:focus-visible {
   box-shadow: var(--ku-shadow-s);
 }
 
-.takeaway-path > li:nth-child(3) {
-  background: var(--ku-brand-soft);
-}
-
 .takeaway-path > li:last-child {
   grid-column: 1 / -1;
   min-height: auto;
