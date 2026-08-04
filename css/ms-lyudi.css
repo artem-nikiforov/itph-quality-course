@@ -379,6 +379,41 @@ input:focus-visible {
   background: color-mix(in srgb, var(--ku-contrast) 11%, var(--ku-card));
 }
 
+.signal-pair .signal-focus {
+  margin-top: var(--ku-space-s);
+  padding: 0.7rem 0.8rem;
+  border-left: 0.25rem solid var(--ku-brand);
+  border-radius: 0 var(--ku-radius-s) var(--ku-radius-s) 0;
+  color: var(--ku-text);
+  background: var(--ku-brand-soft);
+  font-weight: 750;
+}
+
+.schedule-callout {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--ku-contrast);
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--ku-contrast) 17%, var(--ku-card)), var(--ku-card));
+}
+
+.schedule-callout::after {
+  content: "↗";
+  position: absolute;
+  top: -1.4rem;
+  right: 1rem;
+  color: color-mix(in srgb, var(--ku-contrast) 26%, transparent);
+  font-family: var(--ku-font-display);
+  font-size: 7rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.schedule-callout > * {
+  position: relative;
+  z-index: 1;
+}
+
 .flag-intro h2 {
   color: color-mix(in srgb, var(--ku-contrast) 78%, var(--ku-text));
 }
