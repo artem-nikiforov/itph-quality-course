@@ -520,7 +520,7 @@ function showTestReminder(testName) {
   const hint = document.getElementById('test-reminder-' + testName);
   if (!hint) return;
   hint.hidden = false;
-  hint.textContent = 'Сначала выбери любой вариант ответа в тесте выше.';
+  hint.textContent = 'Сначала пройди тест выше.';
   hint.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
