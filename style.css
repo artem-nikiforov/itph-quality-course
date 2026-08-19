@@ -641,7 +641,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(214, 35, 0, .28); }
 .btn-secondary { border: 2px solid var(--c-ink); background: transparent; color: var(--c-ink); }
 .btn-secondary:hover { transform: translateY(-2px); background: #fff; }
-.next-row { display: flex; justify-content: flex-end; padding-top: 18px; }
+.next-row { display: flex; justify-content: flex-end; padding-top: 18px; flex-wrap: wrap; gap: 10px; }
+.test-reminder { flex-basis: 100%; margin: 0; text-align: right; color: var(--c-brand-dk); font-size: 14px; font-weight: 700; }
 
 /* Hero + home */
 .hero-placeholder { position: relative; min-height: min(780px, calc(100vh - 56px)); overflow: hidden; display: grid; align-items: center; background: linear-gradient(115deg, #3a170d 0%, #5f2612 46%, #ff8732 100%); color: #fff; }

@@ -135,10 +135,10 @@ function initFadeIn() {
    ВАЖНО про статус: «Завершён» НЕ ставим автоматически — только по кнопке
    «Завершить» (SCORM.complete()). Прогресс открытия глав хранится отдельно.
    ════════════════════════════════════════════════════════════════════════ */
-const PROGRESS_KEY = 'itph_quality_progress_v7';
+const PROGRESS_KEY = 'itph_quality_progress_v8';
 // Новая версия сбрасывает прогресс из прежних сборок курса.
 // Так при первом открытии доступно только «Введение».
-const PROGRESS_VERSION = 7;
+const PROGRESS_VERSION = 8;
 const completedTests = new Set();
 const REQUIRED_TESTS = {
   prepare: 'calc',
