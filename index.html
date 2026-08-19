@@ -130,7 +130,7 @@
           <h2>По одной цифре ITPH нельзя понять, что происходит на смене.</h2>
           <p>Сопоставляй показатель со скоростью обслуживания и наблюдением за сотрудниками и работой на станциях.</p>
         </div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('prepare')" data-requires-test="calc" aria-disabled="true" disabled>Подготовиться к смене <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('prepare')" data-requires-test="calc" aria-disabled="true">Подготовиться к смене <span>→</span></button><p class="test-reminder" id="test-reminder-calc" hidden aria-live="polite"></p></div>
       </div>
     </section>
 
@@ -200,7 +200,7 @@
           </div>
           <div class="feedback-box" id="control-feedback" aria-live="polite"></div>
         </div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('actions')" data-requires-test="control" aria-disabled="true" disabled>Выбрать решение <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('actions')" data-requires-test="control" aria-disabled="true">Выбрать решение <span>→</span></button><p class="test-reminder" id="test-reminder-control" hidden aria-live="polite"></p></div>
       </div>
     </section>
 
@@ -285,7 +285,7 @@
         </div>
 
         <div class="practice-result fade-in" id="practice-result" aria-live="polite"><span>0 / 3</span><p>Реши все кейсы, чтобы собрать алгоритм целиком.</p></div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('summary')" data-requires-test="practice" aria-disabled="true" disabled>Собрать главное <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('summary')" data-requires-test="practice" aria-disabled="true">Собрать главное <span>→</span></button><p class="test-reminder" id="test-reminder-practice" hidden aria-live="polite"></p></div>
       </div>
     </section>
 
@@ -321,6 +321,6 @@
 
   </main>
 
-  <script src="script.js?v=20260819-4"></script>
+  <script src="script.js?v=20260819-5"></script>
 </body>
 </html>

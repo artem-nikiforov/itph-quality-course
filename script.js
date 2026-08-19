@@ -93,7 +93,10 @@ function advanceTo(pageId) {
   const idx = CHAPTER_ORDER.indexOf(pageId);
   if (idx === -1) return;
   const requiredTest = REQUIRED_TESTS[pageId];
-  if (requiredTest && !completedTests.has(requiredTest)) return;
+  if (requiredTest && !completedTests.has(requiredTest)) {
+    showTestReminder(requiredTest);
+    return;
+  }
   const required = idx + 1;
   if (required > unlockedChapters) {
     unlockedChapters = required;
@@ -507,10 +510,18 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 function updateTestGates() {
   document.querySelectorAll('[data-requires-test]').forEach(btn => {
     const passed = completedTests.has(btn.dataset.requiresTest);
-    btn.disabled = !passed;
+    btn.disabled = false;
     btn.setAttribute('aria-disabled', String(!passed));
-    btn.title = passed ? '' : 'Сначала ответь правильно на вопрос выше';
+    btn.title = passed ? '' : 'Сначала выбери вариант ответа в тесте выше';
   });
+}
+
+function showTestReminder(testName) {
+  const hint = document.getElementById('test-reminder-' + testName);
+  if (!hint) return;
+  hint.hidden = false;
+  hint.textContent = 'Сначала выбери любой вариант ответа в тесте выше.';
+  hint.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 const TEST_BY_FEEDBACK = {
@@ -521,6 +532,7 @@ const TEST_BY_FEEDBACK = {
 function completeTest(testName) {
   if (!testName || completedTests.has(testName)) return;
   completedTests.add(testName);
+  document.getElementById('test-reminder-' + testName)?.setAttribute('hidden', '');
   updateTestGates();
   saveProgress();
 }
