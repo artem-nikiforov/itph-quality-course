@@ -102,7 +102,7 @@
           <p class="quiz-hint">Раздели расход блюд на количество часов сотрудников.</p>
           <div class="choice-grid">
             <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="Сначала раздели 60 блюд на 3 часа сотрудников.">15</button>
-            <button type="button" onclick="answerChoice(this, true, 'calc-feedback')" data-success="Верно: 60 блюд ÷ 3 часа сотрудников = 20.">20</button>
+            <button type="button" onclick="answerChoice(this, true, 'calc-feedback')" data-test="calc" data-success="Верно: 60 блюд ÷ 3 часа сотрудников = 20.">20</button>
             <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="60 — это расход блюд за час. Чтобы получить ITPH, раздели его на 3 часа сотрудников.">60</button>
           </div>
           <div class="feedback-box" id="calc-feedback" aria-live="polite"></div>
@@ -130,7 +130,7 @@
           <h2>По одной цифре ITPH нельзя понять, что происходит на смене.</h2>
           <p>Сопоставляй показатель со скоростью обслуживания и наблюдением за сотрудниками и работой на станциях.</p>
         </div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('prepare')">Подготовиться к смене <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('prepare')" data-requires-test="calc" aria-disabled="true" disabled>Подготовиться к смене <span>→</span></button></div>
       </div>
     </section>
 
@@ -195,12 +195,12 @@
           <h2>Скорость обслуживания снижается: у кассы пять Гостей, кассир молчит, сборщик ждёт кухню, ITPH растёт второй час. Что сделать первым?</h2>
           <div class="choice-list">
             <button type="button" onclick="answerChoice(this, false, 'control-feedback')" data-feedback="ITPH растёт уже второй час, а скорость обслуживания снижается. Не жди: сначала посмотри, какая зона западает.">Подождать ещё полчаса, чтобы цифра стала точнее</button>
-            <button type="button" onclick="answerChoice(this, true, 'control-feedback')" data-success="Верно. Встань в зону наблюдения за работой сотрудников, определи западающую зону и перераспредели сотрудников по 4Н.">Встать в зону наблюдения, определить западающую зону и перераспределить сотрудников по 4Н</button>
+            <button type="button" onclick="answerChoice(this, true, 'control-feedback')" data-test="control" data-success="Верно. Встань в зону наблюдения за работой сотрудников, определи западающую зону и перераспредели сотрудников по 4Н.">Встать в зону наблюдения, определить западающую зону и перераспределить сотрудников по 4Н</button>
             <button type="button" onclick="answerChoice(this, false, 'control-feedback')" data-feedback="Общий призыв работать быстрее не покажет, где возникла задержка. Сначала встань в зону наблюдения и определи западающую зону.">Попросить всех работать быстрее без изменения расстановки</button>
           </div>
           <div class="feedback-box" id="control-feedback" aria-live="polite"></div>
         </div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('actions')">Выбрать решение <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('actions')" data-requires-test="control" aria-disabled="true" disabled>Выбрать решение <span>→</span></button></div>
       </div>
     </section>
 
@@ -285,7 +285,7 @@
         </div>
 
         <div class="practice-result fade-in" id="practice-result" aria-live="polite"><span>0 / 3</span><p>Реши все кейсы, чтобы собрать алгоритм целиком.</p></div>
-        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('summary')">Собрать главное <span>→</span></button></div>
+        <div class="next-row"><button class="btn-primary" type="button" onclick="advanceTo('summary')" data-requires-test="practice" aria-disabled="true" disabled>Собрать главное <span>→</span></button></div>
       </div>
     </section>
 
@@ -321,6 +321,6 @@
 
   </main>
 
-  <script src="script.js?v=20260819-2"></script>
+  <script src="script.js?v=20260819-3"></script>
 </body>
 </html>

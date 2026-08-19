@@ -92,6 +92,8 @@ function navigateTo(pageId) {
 function advanceTo(pageId) {
   const idx = CHAPTER_ORDER.indexOf(pageId);
   if (idx === -1) return;
+  const requiredTest = REQUIRED_TESTS[pageId];
+  if (requiredTest && !completedTests.has(requiredTest)) return;
   const required = idx + 1;
   if (required > unlockedChapters) {
     unlockedChapters = required;
@@ -130,14 +132,20 @@ function initFadeIn() {
    ВАЖНО про статус: «Завершён» НЕ ставим автоматически — только по кнопке
    «Завершить» (SCORM.complete()). Прогресс открытия глав хранится отдельно.
    ════════════════════════════════════════════════════════════════════════ */
-const PROGRESS_KEY = 'itph_quality_progress_v6';
+const PROGRESS_KEY = 'itph_quality_progress_v7';
 // Новая версия сбрасывает прогресс из прежних сборок курса.
 // Так при первом открытии доступно только «Введение».
-const PROGRESS_VERSION = 6;
+const PROGRESS_VERSION = 7;
+const completedTests = new Set();
+const REQUIRED_TESTS = {
+  prepare: 'calc',
+  actions: 'control',
+  summary: 'practice',
+};
 const hubDone = [false, false, false];   // флаги пройденных подразделов (если есть)
 
 function collectState() {
-  return { version: PROGRESS_VERSION, unlocked: unlockedChapters, hub: hubDone.slice() };
+  return { version: PROGRESS_VERSION, unlocked: unlockedChapters, hub: hubDone.slice(), tests: Array.from(completedTests) };
 }
 
 function saveProgress() {
@@ -171,9 +179,13 @@ function loadProgress() {
       if (s.version === PROGRESS_VERSION && Array.isArray(s.hub)) {
         for (let i = 0; i < hubDone.length; i++) hubDone[i] = !!s.hub[i];
       }
+      if (s.version === PROGRESS_VERSION && Array.isArray(s.tests)) {
+        s.tests.forEach(test => completedTests.add(test));
+      }
     } catch (e) {}
   }
   applyHomeLocks();
+  updateTestGates();
   // applyHubLocks();
 }
 
@@ -492,6 +504,22 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 /* ════════════════════════════════════════════════════════════════════════
    ИНТЕРАКТИВЫ КУРСА ITPH
    ════════════════════════════════════════════════════════════════════════ */
+function updateTestGates() {
+  document.querySelectorAll('[data-requires-test]').forEach(btn => {
+    const passed = completedTests.has(btn.dataset.requiresTest);
+    btn.disabled = !passed;
+    btn.setAttribute('aria-disabled', String(!passed));
+    btn.title = passed ? '' : 'Сначала ответь правильно на вопрос выше';
+  });
+}
+
+function completeTest(testName) {
+  if (!testName || completedTests.has(testName)) return;
+  completedTests.add(testName);
+  updateTestGates();
+  saveProgress();
+}
+
 function answerChoice(btn, isCorrect, feedbackId) {
   const group = btn.parentElement;
   const feedback = document.getElementById(feedbackId);
@@ -502,6 +530,7 @@ function answerChoice(btn, isCorrect, feedbackId) {
     group.querySelectorAll('button').forEach(item => { item.disabled = true; });
     feedback.className = 'feedback-box show correct';
     feedback.innerHTML = '<strong>Верно.</strong> ' + (btn.dataset.success || 'Ты выбрал действие, которое связано с причиной отклонения.');
+    completeTest(btn.dataset.test);
   } else {
     btn.classList.add('wrong-choice');
     feedback.className = 'feedback-box show incorrect';
@@ -600,6 +629,7 @@ function answerCase(btn, isCorrect, feedbackId) {
     ? 'Готово: ты различаешь перегрузку, недогрузку и проблему процесса.'
     : 'Осталось разобрать кейсов: ' + (3 - done) + '.';
   result.innerHTML = '<span>' + done + ' / 3</span><p>' + message + '</p>';
+  if (done === 3) completeTest('practice');
 }
 
 
@@ -651,6 +681,7 @@ function completeCourse() {
 document.addEventListener('DOMContentLoaded', () => {
   navigateTo('home');
   applyHomeLocks();
+  updateTestGates();
   updatePrep();
   renderAction('quality');
 });
