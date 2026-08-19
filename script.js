@@ -513,6 +513,11 @@ function updateTestGates() {
   });
 }
 
+const TEST_BY_FEEDBACK = {
+  'calc-feedback': 'calc',
+  'control-feedback': 'control',
+};
+
 function completeTest(testName) {
   if (!testName || completedTests.has(testName)) return;
   completedTests.add(testName);
@@ -524,13 +529,13 @@ function answerChoice(btn, isCorrect, feedbackId) {
   const group = btn.parentElement;
   const feedback = document.getElementById(feedbackId);
   if (!feedback || btn.disabled) return;
+  completeTest(TEST_BY_FEEDBACK[feedbackId]);
 
   if (isCorrect) {
     btn.classList.add('correct-choice');
     group.querySelectorAll('button').forEach(item => { item.disabled = true; });
     feedback.className = 'feedback-box show correct';
     feedback.innerHTML = '<strong>Верно.</strong> ' + (btn.dataset.success || 'Ты выбрал действие, которое связано с причиной отклонения.');
-    completeTest(btn.dataset.test);
   } else {
     btn.classList.add('wrong-choice');
     feedback.className = 'feedback-box show incorrect';
@@ -620,7 +625,6 @@ const practiceSolved = new Set();
 
 function answerCase(btn, isCorrect, feedbackId) {
   answerChoice(btn, isCorrect, feedbackId);
-  if (!isCorrect) return;
   practiceSolved.add(feedbackId);
   const result = document.getElementById('practice-result');
   if (!result) return;
