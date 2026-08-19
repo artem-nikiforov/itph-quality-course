@@ -130,11 +130,14 @@ function initFadeIn() {
    ВАЖНО про статус: «Завершён» НЕ ставим автоматически — только по кнопке
    «Завершить» (SCORM.complete()). Прогресс открытия глав хранится отдельно.
    ════════════════════════════════════════════════════════════════════════ */
-const PROGRESS_KEY = 'itph_quality_progress_v5';
+const PROGRESS_KEY = 'itph_quality_progress_v6';
+// Новая версия сбрасывает прогресс из прежних сборок курса.
+// Так при первом открытии доступно только «Введение».
+const PROGRESS_VERSION = 6;
 const hubDone = [false, false, false];   // флаги пройденных подразделов (если есть)
 
 function collectState() {
-  return { unlocked: unlockedChapters, hub: hubDone.slice() };
+  return { version: PROGRESS_VERSION, unlocked: unlockedChapters, hub: hubDone.slice() };
 }
 
 function saveProgress() {
@@ -162,10 +165,10 @@ function loadProgress() {
   if (json) {
     try {
       const s = JSON.parse(json);                 // защищённый разбор: игнорируем мусор
-      if (typeof s.unlocked === 'number') {
+      if (s.version === PROGRESS_VERSION && typeof s.unlocked === 'number') {
         unlockedChapters = Math.max(1, Math.min(s.unlocked, CHAPTER_ORDER.length));
       }
-      if (Array.isArray(s.hub)) {
+      if (s.version === PROGRESS_VERSION && Array.isArray(s.hub)) {
         for (let i = 0; i < hubDone.length; i++) hubDone[i] = !!s.hub[i];
       }
     } catch (e) {}
