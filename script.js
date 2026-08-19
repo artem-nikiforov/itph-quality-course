@@ -528,13 +528,6 @@ function toggleFlag(btn) {
   btn.setAttribute('aria-expanded', String(isOpen));
 }
 
-function openPersonHours() {
-  document.getElementById('person-hours-dialog')?.showModal();
-}
-
-function closePersonHours() {
-  document.getElementById('person-hours-dialog')?.close();
-}
 
 const ACTIONS = {
   high: {
@@ -549,7 +542,7 @@ const ACTIONS = {
   },
   low: {
     title: 'Ресурс команды выше потока',
-    tag: 'Риск лишних человеко-часов',
+    tag: 'Риск лишних часов сотрудников',
     steps: [
       'Сначала пойми: это первый час ниже цели или сегодня действительно мало Гостей.',
       'Проверь часовую динамику. Если это разовый час, используй время на перерывы по расписанию, подготовку к пику и чистоту.',

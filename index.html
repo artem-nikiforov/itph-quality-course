@@ -86,25 +86,25 @@
       <header class="chapter-hero tone-cream">
         <div class="content-wrap">
           <h1>ITPH — показатель<br>производительности<br>труда.</h1>
-          <p class="chapter-lead">Он показывает, сколько блюд сделали за один человеко-час.</p>
+          <p class="chapter-lead">Он показывает, сколько блюд сделали за один час работы сотрудников.</p>
         </div>
       </header>
       <div class="content-wrap lesson-body">
         <div class="formula-card fade-in">
           <p class="eyebrow">Формула</p>
-          <div class="formula-line"><b>ITPH</b><i>=</i><span>проданные блюда</span><i>÷</i><button class="person-hours-trigger" type="button" onclick="openPersonHours()">человеко-часы <small>Нажми, чтобы посмотреть расчёт</small></button></div>
+          <div class="formula-line"><b>ITPH</b><i>=</i><span>проданные блюда</span><i>÷</i><span>часы сотрудников</span></div>
           <p>За это время расход блюд составил 126.</p>
-          <p class="formula-example"><strong>Пример расчёта: ITPH = 126 блюд ÷ 6 человеко-часов = 21.</strong></p>
+          <p class="formula-example"><strong>Пример расчёта: ITPH = 126 блюд ÷ 6 часов сотрудников = 21.</strong></p>
         </div>
 
         <div class="quiz-card fade-in">
           <div class="quiz-top"><span>Проверь расчёт</span><b>01</b></div>
           <h2>За час расход блюд составил 60. Работали 3 сотрудника. Какой ITPH?</h2>
-          <p class="quiz-hint">Раздели расход блюд на количество человеко-часов.</p>
+          <p class="quiz-hint">Раздели расход блюд на количество часов сотрудников.</p>
           <div class="choice-grid">
-            <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="Сначала раздели 60 блюд на 3 человеко-часа.">15</button>
-            <button type="button" onclick="answerChoice(this, true, 'calc-feedback')" data-success="Верно: 60 блюд ÷ 3 человеко-часа = 20.">20</button>
-            <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="60 — это расход блюд за час. Чтобы получить ITPH, раздели его на 3 человеко-часа.">60</button>
+            <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="Сначала раздели 60 блюд на 3 часа сотрудников.">15</button>
+            <button type="button" onclick="answerChoice(this, true, 'calc-feedback')" data-success="Верно: 60 блюд ÷ 3 часа сотрудников = 20.">20</button>
+            <button type="button" onclick="answerChoice(this, false, 'calc-feedback')" data-feedback="60 — это расход блюд за час. Чтобы получить ITPH, раздели его на 3 часа сотрудников.">60</button>
           </div>
           <div class="feedback-box" id="calc-feedback" aria-live="polite"></div>
         </div>
@@ -320,16 +320,8 @@
       </div>
     </section>
 
-    <dialog class="person-hours-dialog" id="person-hours-dialog" aria-labelledby="person-hours-title">
-      <button class="dialog-close" type="button" onclick="closePersonHours()" aria-label="Закрыть">×</button>
-      <p class="eyebrow">Расчёт</p>
-      <h2 id="person-hours-title">Как считаются человеко-часы</h2>
-      <p>Это время работы всех сотрудников на смене.</p>
-      <div class="person-hours-calc" aria-label="3 сотрудника умножить на 2 часа равно 6 человеко-часов"><span>3 сотрудника</span><i>×</i><span>2 часа</span><i>=</i><b>6 человеко-часов</b></div>
-      <p class="formula-example"><strong>Например: 3 сотрудника работали 2 часа. Получается 6 человеко-часов.</strong></p>
-    </dialog>
   </main>
 
-  <script src="script.js?v=20260804-6"></script>
+  <script src="script.js?v=20260819-1"></script>
 </body>
 </html>
