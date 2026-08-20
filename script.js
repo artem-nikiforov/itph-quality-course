@@ -135,10 +135,10 @@ function initFadeIn() {
    ВАЖНО про статус: «Завершён» НЕ ставим автоматически — только по кнопке
    «Завершить» (SCORM.complete()). Прогресс открытия глав хранится отдельно.
    ════════════════════════════════════════════════════════════════════════ */
-const PROGRESS_KEY = 'itph_quality_progress_v8';
+const PROGRESS_KEY = 'itph_quality_progress_v9';
 // Новая версия сбрасывает прогресс из прежних сборок курса.
 // Так при первом открытии доступно только «Введение».
-const PROGRESS_VERSION = 8;
+const PROGRESS_VERSION = 9;
 const completedTests = new Set();
 const REQUIRED_TESTS = {
   prepare: 'calc',
@@ -167,25 +167,23 @@ function saveProgress() {
 }
 
 function loadProgress() {
-  let json = '';
-  if (window.SCORM && typeof SCORM.get === 'function') {
-    try { json = SCORM.get('cmi.suspend_data') || ''; } catch (e) {}
-  }
-  if (!json) { try { json = localStorage.getItem(PROGRESS_KEY) || ''; } catch (e) {} }
+  // Каждое открытие курса считается новой попыткой: старый прогресс,
+  // ответы и итог предыдущего прохождения не восстанавливаем.
+  unlockedChapters = 1;
+  completedTests.clear();
+  for (let i = 0; i < hubDone.length; i++) hubDone[i] = false;
+  try {
+    localStorage.removeItem(PROGRESS_KEY);
+    localStorage.removeItem(PROGRESS_KEY + '_completed');
+  } catch (e) {}
 
-  if (json) {
-    try {
-      const s = JSON.parse(json);                 // защищённый разбор: игнорируем мусор
-      if (s.version === PROGRESS_VERSION && typeof s.unlocked === 'number') {
-        unlockedChapters = Math.max(1, Math.min(s.unlocked, CHAPTER_ORDER.length));
-      }
-      if (s.version === PROGRESS_VERSION && Array.isArray(s.hub)) {
-        for (let i = 0; i < hubDone.length; i++) hubDone[i] = !!s.hub[i];
-      }
-      if (s.version === PROGRESS_VERSION && Array.isArray(s.tests)) {
-        s.tests.forEach(test => completedTests.add(test));
-      }
-    } catch (e) {}
+  if (window.SCORM && typeof SCORM.set === 'function') {
+    SCORM.set('cmi.suspend_data', JSON.stringify(collectState()));
+    SCORM.set('cmi.core.lesson_status', 'incomplete');
+    SCORM.set('cmi.core.score.raw', '0');
+    SCORM.set('cmi.core.score.min', '0');
+    SCORM.set('cmi.core.score.max', '100');
+    if (typeof SCORM.commit === 'function') SCORM.commit();
   }
   applyHomeLocks();
   updateTestGates();
