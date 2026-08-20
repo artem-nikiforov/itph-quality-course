@@ -685,6 +685,12 @@ function completeCourse() {
     if (typeof SCORM.commit === 'function') SCORM.commit();
   }
   document.getElementById('completion-panel')?.classList.add('show');
+  // В LMS курс обычно открыт отдельным окном. Статус уже отправлен выше,
+  // поэтому после завершения закрываем это окно. Если браузер запрещает
+  // закрытие (например, при локальном открытии), остаётся сообщение о завершении.
+  setTimeout(() => {
+    try { window.close(); } catch (e) {}
+  }, 150);
 }
 
 
